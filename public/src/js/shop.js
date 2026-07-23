@@ -19,7 +19,7 @@ const shopLogic = () => ({
     sortBy: "newest",
     selectedProduct: null,
     activeProduct: null,
-    scrolled: false,
+    scrolled: false,`n    mobileMenuOpen: false,
     user: null,
     showMomoModal: false,
     modalQuantity: 1,
@@ -235,7 +235,7 @@ const shopLogic = () => ({
 
     async fetchProducts() {
         try {
-            const isLookbook = window.location.pathname === '/lookbook.html';
+            const isLookbook = document.body && document.body.dataset.page === 'lookbook';
             const typeFilter = isLookbook ? 'recent-drop' : 'new-drop';
             const res = await fetch(`${API_BASE_URL}/api/drops?includeProducts=true&type=${typeFilter}`);
             const data = await res.json();
@@ -600,7 +600,7 @@ const shopLogic = () => ({
         }
     },
 
-    addToCart(product, qty = 1, size = "M", color = null, qualityLevel = null) {
+    addToCart(product, qty = 1, size = "M", qualityLevel = null, color = null) {
         if (this.storeSettings.purchasingDisabled) {
             window.dispatchEvent(new CustomEvent("notify", { detail: { message: "Purchasing is currently disabled.", type: "error" } }));
             return;
@@ -714,3 +714,4 @@ const shopLogic = () => ({
 });
 
 export default shopLogic;
+

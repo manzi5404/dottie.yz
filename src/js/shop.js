@@ -19,7 +19,7 @@ const shopLogic = () => ({
     sortBy: "newest",
     selectedProduct: null,
     activeProduct: null,
-    scrolled: false,
+    scrolled: false,`n    mobileMenuOpen: false,
     user: null,
     showMomoModal: false,
     modalQuantity: 1,
@@ -714,3 +714,4 @@ const shopLogic = () => ({
 });
 
 export default shopLogic;
+
