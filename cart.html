@@ -3,207 +3,137 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cart | F>F</title>
+    <title>Your Cart | DOTTIE.YZ</title>
     <link rel="stylesheet" href="/src/css/style.css">
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
-    <!-- Tailwind CSS (Using script specifically for styling consistency in this environment if needed, but linking style.css is preferred) -->
-
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="bg-fof-black text-fof-white font-sans antialiased overflow-x-hidden" 
+<body class="bg-d-surface text-d-text-primary antialiased overflow-x-hidden"
       x-data="shopLogic()"
       x-init="init()"
       @scroll.window="scrolled = (window.pageYOffset > 50)"
       :class="{ 'scrolled': scrolled }">
 
-    <!-- Header -->
-    <!-- Header -->
-    <header class="site-header" :class="{ 'scrolled': scrolled }" role="banner">
-      <div class="container">
-        <a href="/index.html" class="logo" aria-label="Faith Over Fear home">F<span class="logo-accent">&gt;</span>F</a>
-
-        <input type="checkbox" id="menu-toggle" class="menu-toggle" style="display: none;">
-        <label for="menu-toggle" class="hamburger" aria-hidden="true"><span></span></label>
-
-        <nav id="primary-nav" class="primary-nav" role="navigation">
-          <ul class="nav-list">
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/shop.html">New Arrivals</a></li>
-            <li><a href="/lookbook.html">Recent Drops</a></li>
-            <li><a href="/about.html">About</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-            <template x-if="!user">
-                <li><a href="/login.html" class="text-fof-accent">Login</a></li>
-            </template>
-            <template x-if="user">
-                <li class="relative group flex flex-col items-center">
-                    <button class="text-sm font-semibold text-fof-accent flex items-center space-x-2">
-                        <span x-text="user.name"></span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="absolute left-1/2 top-full w-48 h-2 -translate-x-1/2 bg-transparent pointer-events-auto"></div>
-                    <div class="absolute left-1/2 top-full mt-1 w-48 min-w-[160px] -translate-x-1/2 z-[999] bg-zinc-900 border border-zinc-800 shadow-xl flex flex-col overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto">
-                        <a href="/reservations.html"
-                                class="block w-full text-left px-4 py-3 text-sm font-medium text-white border-b border-zinc-800 hover:bg-zinc-800 transition-colors">
-                            My Reservations
-                        </a>
-                        <button @click="localStorage.removeItem('fof_token'); localStorage.removeItem('fof_user'); window.location.reload()"
-                                class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition-colors">
-                            Logout
-                        </button>
+    <!-- Shared Header -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-500" :class="scrolled ? 'bg-d-surface/80 backdrop-blur-xl border-b border-d-border' : 'bg-transparent'">
+        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="/index.html"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="h-8 md:h-10"></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/index.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Home</a>
+                <a href="/shop.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Shop</a>
+                <a href="/lookbook.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Lookbook</a>
+                <a href="/about.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">About</a>
+                <a href="/contact.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <template x-if="user"><a href="/reservations.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block" x-text="user.name.split(' ')[0]"></a></template>
+                <template x-if="!user"><a href="/login.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block">Login</a></template>
+                <a href="/cart.html" class="text-white transition-colors relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007L8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+                    <span x-show="cartItems.length > 0" x-text="cartItems.length" class="absolute -top-2 -right-2 w-4 h-4 bg-d-accent text-white text-[9px] font-bold flex items-center justify-center"></span>
+                </a>
+                <label class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5 transition-colors"><input type="checkbox" id="menu-toggle" class="hidden">
+                    <div\ class="w-8\ h-8\ flex\ flex-col\ justify-center\ items-center\ gap-1\.5"\ @click="mobileMenuOpen\ =\ !mobileMenuOpen">
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'opacity-0 scale-0' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''"></div>
                     </div>
-                </li>
-            </template>
-            <li class="cta"><a href="/cart.html">Cart</a></li>
-          </ul>
-        </nav>
-      </div>
+                </label>
+            </div>
+        </div>
     </header>
 
-    <!-- Global Notifications -->
-    <div class="fixed bottom-6 right-6 z-[100] space-y-3 pointer-events-none" 
-         x-data="{ 
-            notifications: [], 
-            add(e) { 
-                const id = Date.now();
-                this.notifications.push({ id, message: e.detail.message, type: e.detail.type });
-                setTimeout(() => this.notifications = this.notifications.filter(n => n.id !== id), 3000);
-            } 
-         }" 
-         @notify.window="add($event)">
-        <template x-for="n in notifications" :key="n.id">
-            <div x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="translate-x-full opacity-0"
-                 x-transition:enter-end="translate-x-0 opacity-100"
-                 x-transition:leave="transition ease-in duration-300"
-                 x-transition:leave-start="translate-x-0 opacity-100"
-                 x-transition:leave-end="translate-x-full opacity-0"
-                 class="pointer-events-auto flex items-center p-4 bg-zinc-900 border border-fof-gray shadow-2xl min-w-[300px]">
-                <div class="w-1 h-10 mr-4" :class="n.type === 'success' ? 'bg-green-500' : 'bg-fof-accent'"></div>
-                <div class="flex-1">
-                    <p class="text-xs uppercase tracking-widest text-gray-500 font-bold mb-0.5" x-text="n.type"></p>
-                    <p class="text-sm font-medium" x-text="n.message"></p>
-                </div>
-            </div>
-        </template>
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" x-transition class="fixed inset-0 z-40 bg-d-surface/98 backdrop-blur-xl flex flex-col items-center justify-center" x-cloak>
+        <nav class="flex flex-col items-center space-y-8">
+            <a href="/index.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Home</a>
+            <a href="/shop.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Shop</a>
+            <a href="/lookbook.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Lookbook</a>
+            <a href="/about.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">About</a>
+            <a href="/contact.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Contact</a>
+        </nav>
     </div>
 
-    <main class="pt-24 min-h-screen">
-        <div class="container mx-auto px-4 md:px-6 py-12">
-            <h1 class="text-4xl md:text-5xl font-display font-bold uppercase mb-12">Your <span class="text-fof-accent">Cart</span></h1>
+    <main class="pt-[72px]">
+        <div class="max-w-7xl mx-auto px-6 py-20">
+            <div class="mb-12">
+                <span class="section-label">Your Order</span>
+                <h1 class="section-heading mt-4">Shopping <span class="text-d-accent">Cart</span></h1>
+            </div>
 
-            <!-- Empty Cart State -->
-            <div x-show="cartItems.length === 0" class="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up px-4" x-cloak>
-                <div class="text-gray-600 mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.5" stroke="currentColor" class="w-24 h-24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                    </svg>
+            <!-- Empty Cart -->
+            <div x-show="cartItems.length === 0" class="flex flex-col items-center justify-center py-20 text-center" x-cloak>
+                <div class="w-24 h-24 border border-d-border flex items-center justify-center mb-8">
+                    <svg class="w-10 h-10 text-d-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007L8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
                 </div>
-                <h2 class="text-2xl font-bold uppercase mb-4">Your cart is empty</h2>
-                <a href="/shop.html" class="bg-fof-accent text-fof-black font-bold uppercase py-3 px-8 text-xs tracking-widest hover:bg-fof-white transition-all transform hover:scale-105 w-full md:w-auto block md:inline-block text-center">Start Shopping</a>
+                <h2 class="text-2xl font-display font-bold uppercase tracking-tight mb-4">Your cart is empty</h2>
+                <p class="text-d-text-secondary mb-8">Looks like you haven't added anything yet.</p>
+                <a href="/shop.html" class="btn-primary">Continue Shopping</a>
             </div>
 
             <!-- Cart Content -->
-            <div x-show="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-12" x-transition>
-                
-                <!-- Items List -->
-                <div class="lg:col-span-2 space-y-6">
+            <div x-show="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-cloak>
+                <!-- Items -->
+                <div class="lg:col-span-2 space-y-4">
                     <template x-for="(item, index) in cartItems" :key="index">
-                        <div class="flex flex-col md:flex-row items-center bg-zinc-900/50 border border-fof-gray p-6 relative group">
-                            
-                            <!-- Remove Button -->
-                            <button @click="removeFromCart(index)" class="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                        <div class="card-base p-6 flex flex-col md:flex-row gap-6 relative">
+                            <button @click="removeFromCart(index)" class="absolute top-4 right-4 text-d-text-muted hover:text-red-400 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
                             </button>
-
-                            <!-- Image -->
-                            <div class="w-24 md:w-32 aspect-square md:aspect-[4/5] bg-fof-gray mb-6 md:mb-0 md:mr-6 overflow-hidden flex-shrink-0 mx-auto md:mx-0">
+                            <div class="w-20 md:w-24 aspect-square bg-d-surface-3 overflow-hidden flex-shrink-0">
                                 <img :src="item.images[0]" class="w-full h-full object-cover">
                             </div>
-
-                                <!-- Details -->
-                                <div class="flex-1 text-center md:text-left w-full">
-                                    <h3 class="font-display font-bold text-xl uppercase tracking-wide mb-1" x-text="item.name"></h3>
-                                    <template x-if="item.selectedQuality">
-                                        <p class="text-xs text-gray-400 uppercase tracking-widest mb-3" x-text="'Quality: ' + item.selectedQuality"></p>
-                                    </template>
-                                    <div class="flex items-center gap-2 mb-4">
-                                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">Size:</p>
-                                        <select 
-                                            @change="updateSize(index, $event.target.value)"
-                                            class="bg-black border border-zinc-800 text-white text-[10px] uppercase tracking-widest px-2 py-1 focus:border-fof-accent outline-none cursor-pointer rounded-sm"
-                                        >
-                                            <template x-for="size in ['S', 'M', 'L', 'XL']" :key="size">
-                                                <option :value="size" :selected="item.selectedSize === size" x-text="size"></option>
-                                            </template>
-                                        </select>
+                            <div class="flex-1">
+                                <h3 class="font-display font-bold text-lg uppercase tracking-wider mb-1" x-text="item.name"></h3>
+                                <template x-if="item.selectedSize">
+                                    <p class="text-xs text-d-text-muted uppercase tracking-widest mb-3">Size: <span x-text="item.selectedSize"></span></p>
+                                </template>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center border border-d-border">
+                                        <button @click="updateQuantity(index, -1)" class="w-8 h-8 flex items-center justify-center hover:bg-d-surface-3 transition-colors text-d-text-secondary text-sm">-</button>
+                                        <span class="w-8 text-center font-bold text-sm" x-text="item.quantity"></span>
+                                        <button @click="updateQuantity(index, 1)" class="w-8 h-8 flex items-center justify-center hover:bg-d-surface-3 transition-colors text-d-text-secondary text-sm">+</button>
                                     </div>
-                                    
-                                    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                                        <!-- Quantity Selector -->
-                                        <div class="flex items-center bg-black border border-zinc-800 rounded-sm">
-                                            <button @click="updateQuantity(index, -1)" class="w-10 h-10 flex items-center justify-center hover:bg-zinc-900 transition-colors text-gray-400">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 12H4" stroke-width="2" stroke-linecap="round"/></svg>
-                                            </button>
-                                            <div class="w-10 text-center font-bold text-sm" x-text="item.quantity"></div>
-                                            <button @click="updateQuantity(index, 1)" class="w-10 h-10 flex items-center justify-center hover:bg-zinc-900 transition-colors text-gray-400">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round"/></svg>
-                                            </button>
-                                        </div>
-
-                                        <div class="text-right">
-                                            <div class="text-xs text-gray-500 font-mono" x-text="item.price.toLocaleString() + ' FRW ea'"></div>
-                                            <div class="text-xl font-bold font-mono text-white" x-text="(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2) + ' FRW'"></div>
-                                        </div>
+                                    <div class="text-right ml-auto">
+                                        <p class="text-xs text-d-text-muted font-mono" x-text="item.price.toLocaleString() + ' FRW ea'"></p>
+                                        <p class="text-lg font-bold font-mono text-white" x-text="(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2) + ' FRW'"></p>
                                     </div>
                                 </div>
                             </div>
-                        </template>
+                        </div>
+                    </template>
                 </div>
 
-                <!-- Summary Card -->
+                <!-- Summary -->
                 <div class="lg:col-span-1">
-                    <div class="sticky top-24 bg-zinc-900 border border-fof-gray p-8 shadow-2xl">
-                        <h2 class="text-2xl font-display font-bold uppercase mb-6 pb-4 border-b border-zinc-800">Summary</h2>
-                        
+                    <div class="bg-d-surface-2 border border-d-border p-8 sticky top-24">
+                        <h2 class="text-xl font-display font-bold uppercase tracking-tight mb-6">Summary</h2>
                         <div class="space-y-4 mb-8">
-                            <div class="flex justify-between text-sm text-gray-400">
+                            <div class="flex justify-between text-sm text-d-text-secondary">
                                 <span>Subtotal</span>
                                 <span class="text-white font-mono" x-text="cartTotal + ' FRW'"></span>
                             </div>
-                            <div class="flex justify-between text-sm text-gray-400">
-                                <span>Deliveries:</span>
-                                <span class="text-green-500 font-bold uppercase text-xs tracking-wider">
-                                    <a href="contact.html">Contact to arrange delivery</a></span>
+                            <div class="flex justify-between text-sm text-d-text-secondary">
+                                <span>Delivery</span>
+                                <span class="text-d-accent font-bold uppercase text-xs">Arranged separately</span>
                             </div>
                         </div>
-
-                        <div class="flex justify-between items-end border-t border-zinc-800 pt-6 mb-8">
+                        <div class="flex justify-between items-end border-t border-d-border pt-6 mb-8">
                             <span class="font-bold uppercase tracking-widest text-sm">Total</span>
                             <span class="text-3xl font-display font-bold text-white font-mono" x-text="grandTotal + ' FRW'"></span>
                         </div>
-
-                        <!-- Live Mode Checkout -->
                         <template x-if="isLiveMode()">
-                            <button @click="initPayment(null)" class="w-full bg-fof-accent text-fof-black font-bold uppercase py-4 tracking-widest hover:bg-fof-white transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
+                            <button @click="initPayment(null)" class="w-full btn-primary flex items-center justify-center space-x-2">
                                 <span>Checkout with MoMo</span>
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             </button>
                         </template>
-
-                        <!-- Reserve Mode Block -->
                         <template x-if="isReservationMode()">
                             <div class="space-y-4">
-                                <div class="bg-fof-accent/10 border border-fof-accent/20 p-4 text-center">
-                                    <p class="text-[10px] text-fof-accent font-bold uppercase tracking-widest">Store is in Reserve Mode</p>
-                                    <p class="text-[9px] text-gray-400 uppercase mt-1">Direct checkout is temporarily disabled. Please reserve items on their product pages.</p>
+                                <div class="bg-d-accent/10 border border-d-accent/20 p-4 text-center">
+                                    <p class="text-[10px] text-d-accent font-bold uppercase tracking-widest">Store is in Reserve Mode</p>
+                                    <p class="text-[9px] text-d-text-muted uppercase mt-1">Direct checkout is temporarily disabled.</p>
                                 </div>
-                                <button disabled class="w-full bg-zinc-800 text-gray-500 font-bold uppercase py-4 tracking-widest cursor-not-allowed flex items-center justify-center space-x-2">
-                                    <span>Checkout Disabled</span>
-                                </button>
+                                <button disabled class="w-full bg-d-surface-3 text-d-text-muted font-bold uppercase py-4 tracking-widest cursor-not-allowed">Checkout Disabled</button>
                             </div>
                         </template>
                     </div>
@@ -212,8 +142,7 @@
         </div>
     </main>
 
-    <!-- Payment Modal (Reused) -->
-    <!-- Payment Modal (Redesigned) -->
+    <!-- Payment Modal -->
     <div x-show="paymentModalOpen" 
          class="fixed inset-0 z-[10000] flex items-center justify-center p-4"
          x-transition:enter="transition ease-out duration-300"
@@ -223,101 +152,89 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          x-cloak>
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm z-[9998]" @click="paymentModalOpen = false"></div>
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" @click="paymentModalOpen = false"></div>
         
-        <div class="relative z-[10001] bg-zinc-900 border border-fof-gray w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh] animate-fade-in-up pointer-events-auto rounded-lg">
-            <!-- Modal Header -->
-            <div class="p-6 border-b border-zinc-800 flex justify-between items-center sticky top-0 bg-zinc-900 z-10">
+        <div class="relative bg-d-surface-2 border border-d-border w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]">
+            <div class="p-6 border-b border-d-border flex justify-between items-center sticky top-0 bg-d-surface-2 z-10">
                 <h3 class="text-xl sm:text-2xl font-display font-bold uppercase tracking-tight">MoMo Checkout</h3>
-                <button @click="paymentModalOpen = false" class="text-gray-500 hover:text-white transition-colors">
+                <button @click="paymentModalOpen = false" class="text-d-text-muted hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
             <div class="p-6 sm:p-8 space-y-8">
-                <!-- User Details Section -->
                 <div class="space-y-4">
-                    <h4 class="text-[10px] uppercase tracking-[0.2em] text-fof-accent font-bold">1. Your Information</h4>
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] text-d-accent font-bold">1. Your Information</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-1.5 font-bold">Full Name</label>
-                            <input type="text" x-model="senderName" placeholder="Enter name" class="w-full bg-black border border-zinc-800 p-3 text-sm focus:border-fof-accent outline-none transition-colors rounded-sm">
+                            <label class="block text-[10px] uppercase tracking-widest text-d-text-muted mb-1.5 font-bold">Full Name</label>
+                            <input type="text" x-model="senderName" placeholder="Enter name" class="w-full bg-d-surface border-b border-d-border p-3 text-sm focus:border-d-accent outline-none transition-colors">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-1.5 font-bold">From (MoMo Number)</label>
-                            <input type="text" x-model="senderPhone" placeholder="078..." class="w-full bg-black border border-zinc-800 p-3 text-sm focus:border-fof-accent outline-none transition-colors rounded-sm">
+                            <label class="block text-[10px] uppercase tracking-widest text-d-text-muted mb-1.5 font-bold">From (MoMo Number)</label>
+                            <input type="text" x-model="senderPhone" placeholder="078..." class="w-full bg-d-surface border-b border-d-border p-3 text-sm focus:border-d-accent outline-none transition-colors">
                         </div>
                         <div class="sm:col-span-2 space-y-1">
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-1.5 font-bold">Amount to Pay (FRW)</label>
-                            <div class="w-full min-h-[48px] flex items-center bg-zinc-800 border border-zinc-700 px-3 py-3 text-sm text-fof-accent font-bold outline-none rounded-sm" x-text="(selectedProduct ? totalPrice : grandTotal) + ' FRW'"></div>
+                            <label class="block text-[10px] uppercase tracking-widest text-d-text-muted mb-1.5 font-bold">Amount to Pay (FRW)</label>
+                            <div class="w-full min-h-[48px] flex items-center bg-d-surface-2 border border-d-border px-3 py-3 text-sm text-d-accent font-bold" x-text="(selectedProduct ? totalPrice : grandTotal) + ' FRW'"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Payment Details Section -->
                 <div class="space-y-4">
-                    <h4 class="text-[10px] uppercase tracking-[0.2em] text-fof-accent font-bold">2. Payment Details</h4>
-                    <div class="bg-black/40 border border-zinc-800 rounded-sm divide-y divide-zinc-800/50">
-                        
-                        <!-- Store Number -->
-                        <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 group cursor-pointer" @click="copyToClipboard('*182*1*1*0791832523#', 'Number')">
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] text-d-accent font-bold">2. Payment Details</h4>
+                    <div class="bg-d-surface/40 border border-d-border divide-y divide-d-border/50">
+                        <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 cursor-pointer" @click="copyToClipboard('*182*1*1*0791832523#', 'Number')">
                             <div>
-                                <span class="block text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-1">To (Store Number)</span>
-                                <span class="font-mono text-white text-lg font-bold tracking-wider" x-text="'*182*1*1*0791832523#'"></span>
+                                <span class="block text-[10px] text-d-text-muted uppercase font-bold tracking-widest mb-1">To (Store Number)</span>
+                                <span class="font-mono text-white text-lg font-bold tracking-wider">*182*1*1*0791832523#</span>
                             </div>
-                            <div class="flex items-center space-x-2 px-3 py-2 bg-zinc-800/50 group-hover:bg-fof-accent group-hover:text-white transition-all rounded text-[10px] uppercase font-bold tracking-widest relative">
+                            <div class="flex items-center space-x-2 px-3 py-2 bg-d-surface-3 text-[10px] uppercase font-bold tracking-widest transition-all hover:bg-d-accent hover:text-white">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                                 <span>Copy</span>
-                                <span x-show="copyFeedback === 'Number'" x-cloak class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-fof-accent text-white text-[10px] px-2 py-1 rounded whitespace-nowrap">Copied!</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Summary Breakdown -->
                 <div class="space-y-4">
-                    <h4 class="text-[10px] uppercase tracking-[0.2em] text-fof-accent font-bold">3. Order Summary</h4>
-                    <div class="bg-black/20 p-4 border border-zinc-800 rounded-sm space-y-3">
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] text-d-accent font-bold">3. Order Summary</h4>
+                    <div class="bg-d-surface/20 p-4 border border-d-border space-y-3">
                         <template x-if="selectedProduct">
                             <div class="flex justify-between items-start text-sm">
-                                <span class="text-gray-400 max-w-[70%]" x-text="selectedProduct.name + ' (' + modalSize + ') x' + modalQuantity"></span>
+                                <span class="text-d-text-secondary max-w-[70%]" x-text="selectedProduct.name + ' (' + modalSize + ') x' + modalQuantity"></span>
                                 <span class="font-mono font-bold" x-text="(parseFloat(selectedProduct.price) * parseInt(modalQuantity)).toFixed(2) + ' FRW'"></span>
                             </div>
                         </template>
                         <template x-if="!selectedProduct">
                             <div class="space-y-2">
                                 <template x-for="item in cartItems">
-                                    <div class="flex justify-between items-start text-xs border-b border-zinc-800/30 pb-2 last:border-0 last:pb-0">
-                                        <span class="text-gray-400 max-w-[70%]" x-text="item.name + ' (x' + item.quantity + ')'"></span>
+                                    <div class="flex justify-between items-start text-xs border-b border-d-border/30 pb-2 last:border-0 last:pb-0">
+                                        <span class="text-d-text-secondary max-w-[70%]" x-text="item.name + ' (x' + item.quantity + ')'"></span>
                                         <span class="font-mono" x-text="(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2) + ' FRW'"></span>
                                     </div>
                                 </template>
                             </div>
                         </template>
-                        
-                        <div class="flex justify-between items-center pt-3 mt-3 border-t border-zinc-700">
+                        <div class="flex justify-between items-center pt-3 mt-3 border-t border-d-border">
                             <span class="text-xs uppercase font-bold tracking-widest text-white">Total Amount</span>
-                            <span class="text-xl font-display font-bold text-fof-accent" x-text="(selectedProduct ? totalPrice : grandTotal) + ' FRW'"></span>
+                            <span class="text-xl font-display font-bold text-d-accent" x-text="(selectedProduct ? totalPrice : grandTotal) + ' FRW'"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Button -->
                 <button @click="verifyPayment()" 
                         :disabled="loading"
-                        class="w-full bg-green-600 hover:bg-green-500 text-white font-bold uppercase py-5 px-6 rounded-sm tracking-[0.2em] text-xs transition-all flex items-center justify-center space-x-3 group active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed">
+                        class="w-full bg-green-600 hover:bg-green-500 text-white font-bold uppercase py-5 px-6 tracking-[0.2em] text-xs transition-all flex items-center justify-center space-x-3 group active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed">
                     <template x-if="!loading">
                         <div class="flex items-center space-x-3">
                             <span>Verify on WhatsApp</span>
-                            <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                         </div>
                     </template>
                     <template x-if="loading">
                         <div class="flex items-center space-x-3">
-                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
+                            <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             <span>Processing...</span>
                         </div>
                     </template>
@@ -326,56 +243,36 @@
         </div>
     </div>
 
-    <!-- Footer (Simplified) -->
-    <footer class="bg-fof-dark border-t border-fof-gray py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Branding -->
-                <div class="col-span-1 md:col-span-2">
-                    <h2 class="text-3xl font-display font-bold mb-4">F<span class="text-fof-accent">&gt;</span>F</h2>
-                    <p class="text-gray-400 text-sm max-w-sm">
-                        Faith over Fear. Streetwear for the bold, the believers, and the brave. Designed for the streets, inspired by the spirit.
-                    </p>
+    <!-- Footer -->
+    <footer class="bg-d-surface-2 border-t border-d-border mt-20">
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-display font-bold mb-3">DOTTIE<span class="text-d-accent">.</span>YZ</h2>
+                    <p class="text-d-text-secondary text-sm max-w-sm leading-relaxed">Premium Streetwear — Est. 2026 — Kigali, Rwanda. Designed for the culture. Built for the streets.</p>
                     <div class="flex space-x-4 mt-6">
-                        <a href="https://www.instagram.com/faithoverfear.rw__/" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="Instagram">
-                             <!-- Instagram Icon -->
-                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                        </a>
-                        <a href="mailto:faithoverfearsupport@gmail.com" class="text-gray-400 hover:text-fof-accent transition-colors" title="Email Us">
-                            <!-- Mail Icon -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        </a>
-                        <a href="https://tiktok.com/@faithoverfear_brand" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="TikTok">
-                            <!-- TikTok Icon -->
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 3.13-1.12 5.74-3.57 7.6-1.66 1.28-3.75 1.75-5.83 1.57-4.13-.37-7.49-3.95-7.61-8.11-.11-3.9 2.78-7.35 6.64-7.95 1.05-.16 2.12-.13 3.17.13v3.94c-1.69-.64-3.69-.47-5.26.47-2.14 1.3-2.91 3.97-1.74 6.18 1.15 2.15 4.14 3.07 6.35 1.94 1.69-.87 2.69-2.61 2.69-4.52V4.54c1.7 1.25 3.79 1.69 5.86 1.22V.02h-3.96c-.05 0-.08.01-.13.01z"/></svg> 
-                        </a>
+                        <a href="https://www.instagram.com/dottie.yz/" target="_blank" class="text-d-text-muted hover:text-white transition-colors">IG</a>
+                        <a href="mailto:dottieyz01@gmail.com" class="text-d-text-muted hover:text-white transition-colors">Email</a>
                     </div>
                 </div>
-
-                <!-- Navigate Section -->
                 <div>
-                    <h3 class="text-white font-bold mb-4">Navigate</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/" class="hover:text-fof-accent transition-colors">Home</a></li>
-                        <li><a href="/shop.html" class="hover:text-fof-accent transition-colors">New Arrivals</a></li>
-                        <li><a href="/lookbook.html" class="hover:text-fof-accent transition-colors">Recent Drops</a></li>
-                        <li><a href="/about.html" class="hover:text-fof-accent transition-colors">About</a></li>
-                        <li><a href="/contact.html" class="hover:text-fof-accent transition-colors">Contact</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-4">Shop</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/shop.html" class="footer-link-hover">New Arrivals</a></li>
+                        <li><a href="/lookbook.html" class="footer-link-hover">Lookbook</a></li>
                     </ul>
                 </div>
-
-                <!-- Support Section -->
                 <div>
-                    <h3 class="text-white font-bold mb-4">Support</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/faq.html" class="hover:text-fof-accent transition-colors">FAQ</a></li>
-                        <li><a href="/shipping.html" class="hover:text-fof-accent transition-colors">Deliveries & Returns</a></li>
-                        <li><a href="/terms.html" class="hover:text-fof-accent transition-colors">Terms</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-4">Support</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/faq.html" class="footer-link-hover">FAQ</a></li>
+                        <li><a href="/shipping.html" class="footer-link-hover">Shipping & Returns</a></li>
+                        <li><a href="/contact.html" class="footer-link-hover">Contact</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-zinc-800 mt-12 pt-8 text-center text-xs text-gray-600 uppercase tracking-widest">
-                &copy; 2026 Faith Over Fear. All Rights Reserved.
+            <div class="border-t border-d-border mt-12 pt-8 text-center">
+                <p class="text-d-text-muted text-xs">&copy; 2026 DOTTIE.YZ. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -383,4 +280,12 @@
     <script type="module" src="/src/js/main.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 

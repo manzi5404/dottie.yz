@@ -3,135 +3,111 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Terms & Conditions | F>F</title>
+    <title>Terms & Conditions | DOTTIE.YZ</title>
     <link rel="stylesheet" href="/src/css/style.css">
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="bg-fof-black text-fof-white font-sans antialiased overflow-x-hidden" 
-      x-data="shopLogic()" 
+<body class="bg-d-surface text-d-text-primary antialiased overflow-x-hidden"
+      x-data="shopLogic()"
       x-init="init()"
       @scroll.window="scrolled = (window.pageYOffset > 50)"
       :class="{ 'scrolled': scrolled }">
 
-    <!-- Header -->
-    <header class="site-header" :class="{ 'scrolled': scrolled }" role="banner">
-      <div class="container">
-        <a href="/index.html" class="logo" aria-label="Faith Over Fear home">F<span class="logo-accent">&gt;</span>F</a>
-
-        <input type="checkbox" id="menu-toggle" class="menu-toggle" style="display: none;">
-        <label for="menu-toggle" class="hamburger" aria-hidden="true"><span></span></label>
-
-        <nav id="primary-nav" class="primary-nav" role="navigation">
-          <ul class="nav-list">
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/shop.html">New Arrivals</a></li>
-            <li><a href="/lookbook.html">Recent Drops</a></li>
-            <li><a href="/about.html">About</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-            <template x-if="!user">
-                <li><a href="/login.html" class="text-fof-accent">Login</a></li>
-            </template>
-            <template x-if="user">
-                <li class="relative group flex flex-col items-center">
-                    <button class="text-sm font-semibold text-fof-accent flex items-center space-x-2">
-                        <span x-text="user.name"></span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="absolute left-1/2 top-full w-48 h-2 -translate-x-1/2 bg-transparent pointer-events-auto"></div>
-                    <div class="absolute left-1/2 top-full mt-1 w-48 min-w-[160px] -translate-x-1/2 z-[999] bg-zinc-900 border border-zinc-800 shadow-xl flex flex-col overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto">
-                        <button @click="localStorage.removeItem('fof_token'); localStorage.removeItem('fof_user'); window.location.reload()"
-                                class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition-colors">
-                            Logout
-                        </button>
+    <!-- Shared Header -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-500" :class="scrolled ? 'bg-d-surface/80 backdrop-blur-xl border-b border-d-border' : 'bg-transparent'">
+        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="/index.html"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="h-8 md:h-10"></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/index.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Home</a>
+                <a href="/shop.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Shop</a>
+                <a href="/lookbook.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Lookbook</a>
+                <a href="/about.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">About</a>
+                <a href="/contact.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <template x-if="user"><a href="/reservations.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block" x-text="user.name.split(' ')[0]"></a></template>
+                <template x-if="!user"><a href="/login.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block">Login</a></template>
+                <a href="/cart.html" class="text-d-text-secondary hover:text-white transition-colors relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007L8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+                    <span x-show="cartItems.length > 0" x-text="cartItems.length" class="absolute -top-2 -right-2 w-4 h-4 bg-d-accent text-white text-[9px] font-bold flex items-center justify-center"></span>
+                </a>
+                <label class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5 transition-colors"><input type="checkbox" id="menu-toggle" class="hidden">
+                    <div\ class="w-8\ h-8\ flex\ flex-col\ justify-center\ items-center\ gap-1\.5"\ @click="mobileMenuOpen\ =\ !mobileMenuOpen">
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'opacity-0 scale-0' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''"></div>
                     </div>
-                </li>
-            </template>
-            <li class="cta"><a href="/cart.html">Cart</a></li>
-          </ul>
-        </nav>
-      </div>
+                </label>
+            </div>
+        </div>
     </header>
 
-    <main class="pt-24 min-h-screen">
-        <div class="container mx-auto px-6 py-12 max-w-3xl">
-            <h1 class="text-4xl md:text-5xl font-display font-bold uppercase mb-16 text-center">The Fine Print</h1>
-            
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" x-transition class="fixed inset-0 z-40 bg-d-surface/98 backdrop-blur-xl flex flex-col items-center justify-center" x-cloak>
+        <nav class="flex flex-col items-center space-y-8">
+            <a href="/index.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Home</a>
+            <a href="/shop.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Shop</a>
+            <a href="/lookbook.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Lookbook</a>
+            <a href="/about.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">About</a>
+            <a href="/contact.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Contact</a>
+        </nav>
+    </div>
+
+    <main class="pt-[72px]">
+        <div class="max-w-3xl mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <span class="section-label">Legal</span>
+                <h1 class="section-heading mt-4">Terms & <span class="text-d-accent">Conditions</span></h1>
+            </div>
+
             <div class="space-y-12">
                 <section>
-                    <h3 class="text-xl font-bold uppercase tracking-wide mb-4 text-white">Privacy Policy</h3>
-                    <p class="text-gray-400">
-                        We value your privacy like we value our own. We do not sell your data. We only use your info to ship your gear and tell you about cool stuff.
-                    </p>
+                    <h2 class="text-xl font-display font-bold uppercase tracking-wider mb-4 text-d-accent">Privacy Policy</h2>
+                    <p class="text-d-text-secondary leading-relaxed">We value your privacy. We do not sell your data. We only use your information to process orders and communicate about your purchases.</p>
                 </section>
 
                 <section>
-                    <h3 class="text-xl font-bold uppercase tracking-wide mb-4 text-white">Terms of Service</h3>
-                    <p class="text-gray-400">
-                        By using this site, you agree to be cool. Creating an account means you are part of the family. We reserve the right to cancel orders if we suspect bot activity (we hate bots).
-                    </p>
+                    <h2 class="text-xl font-display font-bold uppercase tracking-wider mb-4 text-d-accent">Terms of Service</h2>
+                    <p class="text-d-text-secondary leading-relaxed">By using this site, you agree to our terms. Creating an account means you are part of the DOTTIE.YZ community. We reserve the right to cancel orders if we suspect bot activity.</p>
                 </section>
 
                 <section>
-                    <h3 class="text-xl font-bold uppercase tracking-wide mb-4 text-white">Purchase Agreement</h3>
-                    <p class="text-gray-400">
-                        You buy it, we deliver it. If anything goes wrong, we fix it. Simple as that. All transactions are secure and encrypted.
-                    </p>
+                    <h2 class="text-xl font-display font-bold uppercase tracking-wider mb-4 text-d-accent">Purchase Agreement</h2>
+                    <p class="text-d-text-secondary leading-relaxed">You buy it, we deliver it. If anything goes wrong, we fix it. All transactions are secure and encrypted. Payment is verified via MoMo before order processing.</p>
                 </section>
             </div>
         </div>
     </main>
 
-    <footer class="bg-fof-dark border-t border-fof-gray py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Branding -->
-                <div class="col-span-1 md:col-span-2">
-                    <h2 class="text-3xl font-display font-bold mb-4">F<span class="text-fof-accent">&gt;</span>F</h2>
-                    <p class="text-gray-400 text-sm max-w-sm">
-                        Faith over Fear. Streetwear for the bold, the believers, and the brave. Designed for the streets, inspired by the spirit.
-                    </p>
+    <!-- Footer -->
+    <footer class="bg-d-surface-2 border-t border-d-border mt-20">
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-display font-bold mb-3">DOTTIE<span class="text-d-accent">.</span>YZ</h2>
+                    <p class="text-d-text-secondary text-sm max-w-sm leading-relaxed">Premium Streetwear — Est. 2026 — Kigali, Rwanda. Designed for the culture. Built for the streets.</p>
                     <div class="flex space-x-4 mt-6">
-                        <a href="https://www.instagram.com/faithoverfear.rw__/" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="Instagram">
-                             <!-- Instagram Icon -->
-                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                        </a>
-                        <a href="mailto:faithoverfearsupport@gmail.com" class="text-gray-400 hover:text-fof-accent transition-colors" title="Email Us">
-                            <!-- Mail Icon -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        </a>
-                        <a href="https://tiktok.com/@faithoverfear_brand" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="TikTok">
-                            <!-- TikTok Icon -->
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 3.13-1.12 5.74-3.57 7.6-1.66 1.28-3.75 1.75-5.83 1.57-4.13-.37-7.49-3.95-7.61-8.11-.11-3.9 2.78-7.35 6.64-7.95 1.05-.16 2.12-.13 3.17.13v3.94c-1.69-.64-3.69-.47-5.26.47-2.14 1.3-2.91 3.97-1.74 6.18 1.15 2.15 4.14 3.07 6.35 1.94 1.69-.87 2.69-2.61 2.69-4.52V4.54c1.7 1.25 3.79 1.69 5.86 1.22V.02h-3.96c-.05 0-.08.01-.13.01z"/></svg> 
-                        </a>
+                        <a href="https://www.instagram.com/dottie.yz/" target="_blank" class="text-d-text-muted hover:text-white transition-colors">IG</a>
+                        <a href="mailto:dottieyz01@gmail.com" class="text-d-text-muted hover:text-white transition-colors">Email</a>
                     </div>
                 </div>
-
-                <!-- Navigate Section -->
                 <div>
-                    <h3 class="text-white font-bold mb-4">Navigate</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/" class="hover:text-fof-accent transition-colors">Home</a></li>
-                        <li><a href="/shop.html" class="hover:text-fof-accent transition-colors">New Arrivals</a></li>
-                        <li><a href="/lookbook.html" class="hover:text-fof-accent transition-colors">Recent Drops</a></li>
-                        <li><a href="/about.html" class="hover:text-fof-accent transition-colors">About</a></li>
-                        <li><a href="/contact.html" class="hover:text-fof-accent transition-colors">Contact</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-4">Shop</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/shop.html" class="footer-link-hover">New Arrivals</a></li>
+                        <li><a href="/lookbook.html" class="footer-link-hover">Lookbook</a></li>
                     </ul>
                 </div>
-
-                <!-- Support Section -->
                 <div>
-                    <h3 class="text-white font-bold mb-4">Support</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/faq.html" class="hover:text-fof-accent transition-colors">FAQ</a></li>
-                        <li><a href="/shipping.html" class="hover:text-fof-accent transition-colors">Deliveries & Returns</a></li>
-                        <li><a href="/terms.html" class="hover:text-fof-accent transition-colors">Terms</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-4">Support</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/faq.html" class="footer-link-hover">FAQ</a></li>
+                        <li><a href="/contact.html" class="footer-link-hover">Contact</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-zinc-800 mt-12 pt-8 text-center text-xs text-gray-600 uppercase tracking-widest">
-                &copy; 2026 Faith Over Fear. All Rights Reserved.
+            <div class="border-t border-d-border mt-12 pt-8 text-center">
+                <p class="text-d-text-muted text-xs">&copy; 2026 DOTTIE.YZ. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -139,4 +115,12 @@
     <script type="module" src="/src/js/main.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 

@@ -1,8 +1,8 @@
-const API_BASE_URL = window.API_BASE_URL || document.body?.dataset?.apiBaseUrl || (() => {
+﻿const API_BASE_URL = window.API_BASE_URL || document.body?.dataset?.apiBaseUrl || (() => {
     const host = window.location.hostname;
-    if (host === 'localhost') return 'http://localhost:5000';
-    if (host === '127.0.0.1') return 'http://localhost:5000';
-    return 'https://fof-backend-production.up.railway.app';
+    if (host === 'localhost') return 'http://localhost:3000';
+    if (host === '127.0.0.1') return 'http://localhost:3000';
+    return 'https://DOTTIE-backend-production.up.railway.app';
 })();
 
 const shopLogic = () => ({
@@ -19,7 +19,8 @@ const shopLogic = () => ({
     sortBy: "newest",
     selectedProduct: null,
     activeProduct: null,
-    scrolled: false,`n    mobileMenuOpen: false,
+    scrolled: false,
+    mobileMenuOpen: false,
     user: null,
     showMomoModal: false,
     modalQuantity: 1,
@@ -159,8 +160,7 @@ const shopLogic = () => ({
     },
 
     async init() {
-        this.user = JSON.parse(localStorage.getItem('fof_user') || 'null');
-        if (!this.requireLoginForProductPages()) return;
+        this.user = JSON.parse(localStorage.getItem('dottie_user') || 'null');
 
         this.loading = true;
         this.configLoading = true;
@@ -192,45 +192,17 @@ const shopLogic = () => ({
                 console.warn('[Reservation Debug] unexpected store config payload:', data);
             }
         } catch (err) {
-            console.error('❌ Failed to fetch store config:', err);
+            console.error('âŒ Failed to fetch store config:', err);
         }
-    },
-
-    ensureLoggedIn() {
-        const token = localStorage.getItem('fof_token');
-        if (!token) {
-            window.dispatchEvent(new CustomEvent('notify', {
-                detail: {
-                    message: 'Please login or sign up before reserving.',
-                    type: 'error'
-                }
-            }));
-            window.location.href = '/login.html';
-            return false;
-        }
-        return true;
     },
 
     getSessionId() {
-        let sessionId = localStorage.getItem('fof_session_id');
+        let sessionId = localStorage.getItem('dottie_session_id');
         if (!sessionId) {
             sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('fof_session_id', sessionId);
+            localStorage.setItem('dottie_session_id', sessionId);
         }
         return sessionId;
-    },
-
-    requireLoginForProductPages() {
-        const path = window.location.pathname.toLowerCase();
-        const protectedPaths = ['/', '/index.html', '/shop.html', '/product.html', '/lookbook.html'];
-        if (protectedPaths.some(p => path === p || path.startsWith(p))) {
-            const token = localStorage.getItem('fof_token');
-            if (!token) {
-                window.location.href = '/login.html';
-                return false;
-            }
-        }
-        return true;
     },
 
     async fetchProducts() {
@@ -354,7 +326,7 @@ const shopLogic = () => ({
         this.paymentModalOpen = true;
     },
 
-    initCart() { this.cartItems = JSON.parse(localStorage.getItem("fof_cart")) || []; },
+    initCart() { this.cartItems = JSON.parse(localStorage.getItem("dottie_cart")) || []; },
 
     openMomoQuickPay(product, qty = 1, size = "M", color = null, qualityLevel = null) {
         if (this.storeSettings.purchasingDisabled) {
@@ -405,7 +377,7 @@ const shopLogic = () => ({
     get grandTotal() { return this.cartTotalRaw.toFixed(2); },
 
     persistCart() {
-        localStorage.setItem("fof_cart", JSON.stringify(this.cartItems));
+        localStorage.setItem("dottie_cart", JSON.stringify(this.cartItems));
         window.dispatchEvent(new CustomEvent("cart-updated"));
     },
 
@@ -458,7 +430,7 @@ const shopLogic = () => ({
 
         this.loading = true;
 
-        const token = localStorage.getItem('fof_token');
+        const token = localStorage.getItem('dottie_token');
         const sessionId = this.getSessionId();
 
         // Prepare WhatsApp message components
@@ -543,7 +515,7 @@ const shopLogic = () => ({
             }
 
             const orderIdStr = createdOrderIds.length > 0 ? createdOrderIds.join(', ') : 'N/A';
-            const message = `F>F PAYMENT VERIFICATION\n----------------------------\nOrder ID: ${orderIdStr}\nCustomer: ${this.senderName}\nPhone: ${this.senderPhone}\n\nItems:\n${itemsList}\n\nTOTAL: ${total} FRW\n----------------------------\nI have already sent the payment. Please verify this order.`;
+            const message = `DOTTIE.YZ PAYMENT VERIFICATION\n----------------------------\nOrder ID: ${orderIdStr}\nCustomer: ${this.senderName}\nPhone: ${this.senderPhone}\n\nItems:\n${itemsList}\n\nTOTAL: ${total} FRW\n----------------------------\nI have already sent the payment. Please verify this order.`;
 
             window.open(`https://wa.me/250791832523?text=${encodeURIComponent(message)}`, "_blank");
 
@@ -571,7 +543,7 @@ const shopLogic = () => ({
                 detail: { message: detailedError, type: "error" } 
             }));
 
-            const fallbackMessage = `F>F PAYMENT VERIFICATION (Direct)\n----------------------------\nCustomer: ${this.senderName}\nPhone: ${this.senderPhone}\n\nItems:\n${itemsList}\n\nTOTAL: ${total} FRW\n----------------------------\nI have already sent the payment for these items. Please verify and process my order.\nNote: Order creation encountered an issue. Please contact support with your order details.`;
+            const fallbackMessage = `DOTTIE.YZ PAYMENT VERIFICATION (Direct)\n----------------------------\nCustomer: ${this.senderName}\nPhone: ${this.senderPhone}\n\nItems:\n${itemsList}\n\nTOTAL: ${total} FRW\n----------------------------\nI have already sent the payment for these items. Please verify and process my order.\nNote: Order creation encountered an issue. Please contact support with your order details.`;
 
             window.open(`https://wa.me/250791832523?text=${encodeURIComponent(fallbackMessage)}`, "_blank");
 
@@ -641,7 +613,6 @@ const shopLogic = () => ({
     decrementQty(product) { if (product.uiQuantity > 1) product.uiQuantity--; },
 
     initReservation(product, size = "M", color = null, qualityLevel = null) {
-        if (!this.ensureLoggedIn()) return;
         console.log('[Reservation Debug] frontend mode before opening form:', this.storeConfig.store_mode);
         this.selectedProduct = product;
         this.reservationData = {
@@ -658,7 +629,6 @@ const shopLogic = () => ({
     },
 
     async submitReservation() {
-        if (!this.ensureLoggedIn()) return;
         if (!this.reservationData.fullName || !this.reservationData.email) {
             window.dispatchEvent(new CustomEvent("notify", { detail: { message: "Please fill in your name and email.", type: "error" } }));
             return;
@@ -666,8 +636,8 @@ const shopLogic = () => ({
 
         this.loading = true;
 
-        const user = JSON.parse(localStorage.getItem('fof_user'));
-        const token = localStorage.getItem('fof_token');
+        const user = JSON.parse(localStorage.getItem('dottie_user'));
+        const token = localStorage.getItem('dottie_token');
         const payload = {
             ...this.reservationData,
             productId: this.selectedProduct.id,

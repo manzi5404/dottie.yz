@@ -1,0 +1,24 @@
+{
+  "name": "DOTTIE-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:admin": "vite --config src/admin/drops/vite.config.js --port 5174",
+    "build": "vite build && npm run build:admin",
+    "build:admin": "node -e \"const fs=require('fs');const path=require('path');const src=path.join(process.cwd(),'..','dist','admin');const dst=path.join(process.cwd(),'dist','admin');if(fs.existsSync(src)){fs.rmSync(dst,{recursive:true,force:true});fs.cpSync(src,dst,{recursive:true});console.log('Copied admin build from',src,'to',dst)}else{console.error('Admin build not found at',src);process.exit(1)}\"",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@alpinejs/collapse": "^3.14.8",
+    "alpinejs": "^3.14.8",
+    "gsap": "^3.12.5"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.4.47",
+    "autoprefixer": "^10.4.20",
+    "vite": "^6.0.0"
+  }
+}

@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+      (function () {
+        try {
+          var played = sessionStorage.getItem('dottie_intro_played') === '1';
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (played || reduced) document.documentElement.classList.add('DOTTIE-intro-skip');
+        } catch (e) {}
+        setTimeout(function () {
+          var el = document.getElementById('DOTTIE-intro');
+          if (el) el.remove();
+        }, 9000);
+        var apiBase = document.body && document.body.dataset && document.body.dataset.apiBaseUrl;
+        if (apiBase) window.API_BASE_URL = apiBase;
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | DOTTIE.YZ</title>
+    <link rel="stylesheet" href="/src/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body data-api-base-url="https://dottie.yz-mqgz.onrender.com" class="bg-DOTTIE-black text-DOTTIE-white font-sans antialiased overflow-x-hidden min-h-screen flex items-center justify-center p-6"
+      x-data="authLogic()">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-10">
+            <a href="/shop.html" class="text-4xl font-display font-bold tracking-tighter">F<span class="text-DOTTIE-accent">&gt;</span>F</a>
+            <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mt-2">DOTTIE.YZ</p>
+        </div>
+
+        <div class="bg-zinc-900 border border-DOTTIE-gray p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-DOTTIE-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <h1 class="text-2xl font-display font-bold uppercase tracking-tight mb-8">Welcome Back</h1>
+
+            <form @submit.prevent="login()" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold">Email Address</label>
+                    <input type="email" x-model="email" required
+                           class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-all rounded-none placeholder-gray-700"
+                           placeholder="name@example.com">
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold">Password</label>
+                        <a href="/forgot-password.html" class="text-[10px] uppercase tracking-widest text-DOTTIE-accent hover:text-white transition-colors font-bold">Forgot?</a>
+                    </div>
+                    <input type="password" x-model="password" required
+                           class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-all rounded-none placeholder-gray-700"
+                           placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <input type="checkbox" id="remember" x-model="rememberMe" class="w-4 h-4 bg-black border-zinc-800 text-DOTTIE-accent focus:ring-0 rounded-none">
+                    <label for="remember" class="text-[10px] uppercase tracking-widest text-gray-500 font-bold cursor-pointer">Remember Me</label>
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-DOTTIE-accent text-DOTTIE-black font-bold uppercase py-4 text-xs tracking-[0.2em] hover:bg-DOTTIE-white transition-all transform hover:scale-105"
+                        :disabled="loading">
+                    <span x-show="!loading">Login</span>
+                    <span x-show="loading" x-cloak>Processing...</span>
+                </button>
+            </form>
+
+            <p class="text-center text-[10px] uppercase tracking-widest text-gray-500 mt-10 font-bold">
+                New to the movement? <a href="/signup.html" class="text-DOTTIE-accent hover:text-white transition-colors">Join Now</a>
+            </p>
+        </div>
+    </div>
+
+    <div x-data="{ show: false, message: '', type: 'success' }"
+         @notify.window="show = true; message = $event.detail.message; type = $event.detail.type || 'success'; setTimeout(() => show = false, 3000)"
+         x-show="show"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-2"
+         class="fixed bottom-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg flex items-center space-x-3"
+         :class="type === 'success' ? 'bg-zinc-800 text-DOTTIE-accent border border-DOTTIE-accent/20' : 'bg-red-900/90 text-white'">
+         <span x-text="message"></span>
+    </div>
+
+    <script type="module" src="/src/js/entry/login-entry.js"></script>
+</body>
+</html>
+
+
+

@@ -3,141 +3,170 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FAQ | F&gt;F</title>
-    <meta name="description" content="Faith Over Fear FAQ - answers about sizing, delivery in Rwanda, returns, and caring for your F>F streetwear." />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <title>FAQ | DOTTIE.YZ</title>
+    <link rel="stylesheet" href="/src/css/style.css">
     <style>[x-cloak] { display: none !important; }</style>
-  <script type="module" crossorigin src="/assets/style-BICTOAOQ.js"></script>
-  <script type="module" crossorigin src="/assets/alpine-B4coYYx7.js"></script>
-  <script type="module" crossorigin src="/assets/gsap-CzGW6FVa.js"></script>
-  <script type="module" crossorigin src="/assets/vendor-DsuMuRmO.js"></script>
-  <script type="module" crossorigin src="/assets/main-x-9EFTkd.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-ESBS-82G.css">
 </head>
-<body class="bg-fof-black text-fof-white font-sans antialiased overflow-x-hidden"
+<body class="bg-d-surface text-d-text-primary antialiased overflow-x-hidden"
       x-data="shopLogic()"
       x-init="init()"
       @scroll.window="scrolled = (window.pageYOffset > 50)"
       :class="{ 'scrolled': scrolled }">
 
-    <header class="site-header" :class="{ 'scrolled': scrolled }" role="banner">
-      <div class="container">
-        <a href="/shop.html" class="logo" aria-label="Faith Over Fear home">F<span class="logo-accent">&gt;</span>F</a>
-        <input type="checkbox" id="menu-toggle" class="menu-toggle" style="display: none;">
-        <label for="menu-toggle" class="hamburger" aria-hidden="true"><span></span></label>
-        <nav id="primary-nav" class="primary-nav" role="navigation">
-          <ul class="nav-list">
-            <li><a href="/shop.html">New Arrivals</a></li>
-            <li><a href="/lookbook.html">Lookbook</a></li>
-            <li><a href="/about.html">About</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-            <template x-if="!user">
-                <li><a href="/login.html" class="text-fof-accent">Login</a></li>
-            </template>
-            <template x-if="user">
-                <li class="relative group flex flex-col items-center">
-                    <button class="text-sm font-semibold text-fof-accent flex items-center space-x-2">
-                        <span x-text="user.name"></span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="absolute left-1/2 top-full w-48 h-2 -translate-x-1/2 bg-transparent pointer-events-auto"></div>
-                    <div class="absolute left-1/2 top-full mt-1 w-48 min-w-[160px] -translate-x-1/2 z-[999] bg-zinc-900 border border-zinc-800 shadow-xl flex flex-col overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto"><button @click="localStorage.removeItem('fof_token'); localStorage.removeItem('fof_user'); window.location.reload()" class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition-colors">Logout</button>
+    <!-- Shared Header -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-500" :class="scrolled ? 'bg-d-surface/80 backdrop-blur-xl border-b border-d-border' : 'bg-transparent'">
+        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="/index.html"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="h-8 md:h-10"></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/index.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Home</a>
+                <a href="/shop.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Shop</a>
+                <a href="/lookbook.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Lookbook</a>
+                <a href="/about.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">About</a>
+                <a href="/contact.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <template x-if="user"><a href="/reservations.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block" x-text="user.name.split(' ')[0]"></a></template>
+                <template x-if="!user"><a href="/login.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block">Login</a></template>
+                <a href="/cart.html" class="text-d-text-secondary hover:text-white transition-colors relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007L8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+                    <span x-show="cartItems.length > 0" x-text="cartItems.length" class="absolute -top-2 -right-2 w-4 h-4 bg-d-accent text-white text-[9px] font-bold flex items-center justify-center"></span>
+                </a>
+                <label class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5 transition-colors"><input type="checkbox" id="menu-toggle" class="hidden">
+                    <div\ class="w-8\ h-8\ flex\ flex-col\ justify-center\ items-center\ gap-1\.5"\ @click="mobileMenuOpen\ =\ !mobileMenuOpen">
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'opacity-0 scale-0' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''"></div>
                     </div>
-                </li>
-            </template>
-            <li class="cta"><a href="/cart.html">Cart</a></li>
-          </ul>
-        </nav>
-      </div>
+                </label>
+            </div>
+        </div>
     </header>
 
-    <main class="pt-24 min-h-screen">
-        <div class="container mx-auto px-6 py-12 max-w-4xl">
-            <h1 class="text-4xl md:text-5xl font-display font-bold uppercase mb-8 text-center">Frequently Asked Questions</h1>
-            <p class="text-gray-400 text-center max-w-2xl mb-12 mx-auto">
-                Find answers about sizing, delivery in Rwanda, returns, and caring for your Faith Over Fear streetwear.
-                Our limited streetwear drops are designed in Kigali with quality and conviction.
-            </p>
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" x-transition class="fixed inset-0 z-40 bg-d-surface/98 backdrop-blur-xl flex flex-col items-center justify-center" x-cloak>
+        <nav class="flex flex-col items-center space-y-8">
+            <a href="/index.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Home</a>
+            <a href="/shop.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Shop</a>
+            <a href="/lookbook.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Lookbook</a>
+            <a href="/about.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">About</a>
+            <a href="/contact.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Contact</a>
+        </nav>
+    </div>
 
-            <div class="space-y-8">
-                <div>
-                    <h2 class="text-2xl font-display font-bold text-fof-accent mb-4">Sizing &amp; Fit</h2>
-                    <div class="border border-fof-gray p-6 bg-zinc-900/30">
-                        <h3 class="font-bold text-lg text-white mb-2">How does the sizing work?</h3>
-                        <p class="text-gray-400">We aim for a modern, sized streetwear fit. If you like it baggy or medium we got you. If you want a more standard fit, size down one. Check our Size Guide on each product page for measurements.</p>
+    <main class="pt-[72px]">
+        <div class="max-w-3xl mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <span class="section-label">Help</span>
+                <h1 class="section-heading mt-4">Frequently Asked <span class="text-d-accent">Questions</span></h1>
+            </div>
+
+            <div class="space-y-0 border-t border-d-border">
+                <div class="border-b border-d-border" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full py-8 flex items-center justify-between text-left group">
+                        <span class="text-lg font-display font-bold uppercase tracking-wider group-hover:text-d-accent transition-colors">How does reserve mode work?</span>
+                        <svg class="w-5 h-5 text-d-text-muted transition-transform" :class="open ? 'rotate-45' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <div x-show="open" x-transition class="pb-8">
+                        <p class="text-d-text-secondary leading-relaxed">When the store is in reserve mode, you can browse and create an order, but you cannot pay directly online. You pay via MoMo to our store number, then the admin verifies your payment manually and approves your order.</p>
                     </div>
                 </div>
 
-                <div>
-                    <h2 class="text-2xl font-display font-bold text-fof-accent mb-4">Delivery &amp; Orders</h2>
-                    <div class="border border-fof-gray p-6 bg-zinc-900/30">
-                        <h3 class="font-bold text-lg text-white mb-2">When will I get my order?</h3>
-                        <p class="text-gray-400">Orders are printed or sewed within 1-2 business days. Standard deliveries are done on both Wednesday and Sunday. You'll get a confirmation message the second your order leaves our warehouse.</p>
+                <div class="border-b border-d-border" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full py-8 flex items-center justify-between text-left group">
+                        <span class="text-lg font-display font-bold uppercase tracking-wider group-hover:text-d-accent transition-colors">What payment methods do you accept?</span>
+                        <svg class="w-5 h-5 text-d-text-muted transition-transform" :class="open ? 'rotate-45' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <div x-show="open" x-transition class="pb-8">
+                        <p class="text-d-text-secondary leading-relaxed">We accept Mobile Money (MoMo) as our primary payment method. During live mode, our system verifies MoMo payments automatically in real-time. During reserve mode, payment is verified manually by our team.</p>
                     </div>
                 </div>
 
-                <div>
-                    <h2 class="text-2xl font-display font-bold text-fof-accent mb-4">Returns &amp; Exchanges</h2>
-                    <div class="border border-fof-gray p-6 bg-zinc-900/30">
-                        <h3 class="font-bold text-lg text-white mb-2">Can I return items?</h3>
-                        <p class="text-gray-400">Yes! We accept returns on unworn items within the same day of delivery. If it doesn't fit right, we'll swap it out. (Sale items are final sale). See <a href="/shipping.html" class="text-white underline">Deliveries &amp; Returns</a> for details.</p>
+                <div class="border-b border-d-border" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full py-8 flex items-center justify-between text-left group">
+                        <span class="text-lg font-display font-bold uppercase tracking-wider group-hover:text-d-accent transition-colors">What is your return policy?</span>
+                        <svg class="w-5 h-5 text-d-text-muted transition-transform" :class="open ? 'rotate-45' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <div x-show="open" x-transition class="pb-8">
+                        <p class="text-d-text-secondary leading-relaxed">Items may be returned within 14 days of delivery if unworn, unwashed, and with original tags attached. Customers are responsible for return shipping costs unless the item is defective.</p>
                     </div>
                 </div>
 
-                <div>
-                    <h2 class="text-2xl font-display font-bold text-fof-accent mb-4">Care Instructions</h2>
-                    <div class="border border-fof-gray p-6 bg-zinc-900/30">
-                        <h3 class="font-bold text-lg text-white mb-2">How do I wash my F&gt;F gear?</h3>
-                        <p class="text-gray-400">To keep the puff print popping and the fabric fresh: Wash cold, inside out. Hang dry is best, or tumble dry low. Do not iron directly on the graphics!</p>
+                <div class="border-b border-d-border" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full py-8 flex items-center justify-between text-left group">
+                        <span class="text-lg font-display font-bold uppercase tracking-wider group-hover:text-d-accent transition-colors">Do you ship internationally?</span>
+                        <svg class="w-5 h-5 text-d-text-muted transition-transform" :class="open ? 'rotate-45' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <div x-show="open" x-transition class="pb-8">
+                        <p class="text-d-text-secondary leading-relaxed">Currently, we ship within Rwanda. International shipping is coming soon. Sign up for our newsletter to be notified when we expand.</p>
                     </div>
                 </div>
 
-                <div>
-                    <h2 class="text-2xl font-display font-bold text-fof-accent mb-4">Limited Drops</h2>
-                    <div class="border border-fof-gray p-6 bg-zinc-900/30">
-                        <h3 class="font-bold text-lg text-white mb-2">Do you restock items in the archive?</h3>
-                        <p class="text-gray-400">Some core items restock, but most Drops are limited edition. Once a collection is retired, it typically stays retired. Follow us on our social platforms to stay updated on new drops!</p>
+                <div class="border-b border-d-border" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full py-8 flex items-center justify-between text-left group">
+                        <span class="text-lg font-display font-bold uppercase tracking-wider group-hover:text-d-accent transition-colors">How do I track my order?</span>
+                        <svg class="w-5 h-5 text-d-text-muted transition-transform" :class="open ? 'rotate-45' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <div x-show="open" x-transition class="pb-8">
+                        <p class="text-d-text-secondary leading-relaxed">Once your order is shipped, you will receive a tracking number via email. Use that number to track your package on our website or directly with the courier.</p>
+                    </div>
+                </div>
+
+                <div class="border-b border-d-border" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full py-8 flex items-center justify-between text-left group">
+                        <span class="text-lg font-display font-bold uppercase tracking-wider group-hover:text-d-accent transition-colors">Can I cancel or modify my order?</span>
+                        <svg class="w-5 h-5 text-d-text-muted transition-transform" :class="open ? 'rotate-45' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <div x-show="open" x-transition class="pb-8">
+                        <p class="text-d-text-secondary leading-relaxed">Orders can be modified or cancelled within 1 hour of placement. After that, orders enter our fulfillment queue and cannot be changed. Contact us immediately if you need to make changes.</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-fof-dark border-t border-fof-gray py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <h2 class="text-3xl font-display font-bold mb-4">F<span class="text-fof-accent">&gt;</span>F</h2>
-                    <p class="text-gray-400 text-sm max-w-sm">Faith over Fear. Streetwear for the bold, the believers, and the brave.</p>
+    <!-- Footer -->
+    <footer class="bg-d-surface-2 border-t border-d-border mt-20">
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-display font-bold mb-3">DOTTIE<span class="text-d-accent">.</span>YZ</h2>
+                    <p class="text-d-text-secondary text-sm max-w-sm leading-relaxed">Premium Streetwear — Est. 2026 — Kigali, Rwanda. Designed for the culture. Built for the streets.</p>
                     <div class="flex space-x-4 mt-6">
-                        <a href="https://www.instagram.com/faithoverfear.rw__/" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="Instagram"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                        <a href="mailto:faithoverfearsupport@gmail.com" class="text-gray-400 hover:text-fof-accent transition-colors" title="Email Us"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></a>
-                        <a href="https://tiktok.com/@faithoverfear_brand" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="TikTok"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 3.13-1.12 5.74-3.57 7.6-1.66 1.28-3.75 1.75-5.83 1.57-4.13-.37-7.49-3.95-7.61-8.11-.11-3.9 2.78-7.35 6.64-7.95 1.05-.16 2.12-.13 3.17.13v3.94c-1.69-.64-3.69-.47-5.26.47-2.14 1.3-2.91 3.97-1.74 6.18 1.15 2.15 4.14 3.07 6.35 1.94 1.69-.87 2.69-2.61 2.69-4.52V4.54c1.7 1.25 3.79 1.69 5.86 1.22V.02h-3.96c-.05 0-.08.01-.13.01z"/></svg></a>
+                        <a href="https://www.instagram.com/dottie.yz/" target="_blank" class="text-d-text-muted hover:text-white transition-colors">IG</a>
+                        <a href="mailto:dottieyz01@gmail.com" class="text-d-text-muted hover:text-white transition-colors">Email</a>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-white font-bold mb-4">Navigate</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/shop.html" class="hover:text-fof-accent transition-colors">New Arrivals</a></li>
-                        <li><a href="/lookbook.html" class="hover:text-fof-accent transition-colors">Lookbook</a></li>
-                        <li><a href="/about.html" class="hover:text-fof-accent transition-colors">Our Story</a></li>
-                        <li><a href="/contact.html" class="hover:text-fof-accent transition-colors">Contact Us</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-4">Shop</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/shop.html" class="footer-link-hover">New Arrivals</a></li>
+                        <li><a href="/lookbook.html" class="footer-link-hover">Lookbook</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-white font-bold mb-4">Support</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/faq.html" class="hover:text-fof-accent transition-colors">FAQ</a></li>
-                        <li><a href="/shipping.html" class="hover:text-fof-accent transition-colors">Deliveries &amp; Returns</a></li>
-                        <li><a href="/terms.html" class="hover:text-fof-accent transition-colors">Terms</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-4">Support</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/faq.html" class="footer-link-hover">FAQ</a></li>
+                        <li><a href="/shipping.html" class="footer-link-hover">Shipping & Returns</a></li>
+                        <li><a href="/contact.html" class="footer-link-hover">Contact</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-zinc-800 mt-12 pt-8 text-center text-xs text-gray-600 uppercase tracking-widest">&copy; 2026 Faith Over Fear. All Rights Reserved.</div>
+            <div class="border-t border-d-border mt-12 pt-8 text-center">
+                <p class="text-d-text-muted text-xs">&copy; 2026 DOTTIE.YZ. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
+    <script type="module" src="/src/js/main.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

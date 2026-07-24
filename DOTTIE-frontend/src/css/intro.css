@@ -1,0 +1,139 @@
+﻿/* ============================================================
+   DOTTIE.YZ â€” Brand Introduction
+   A calm, cinematic monochrome sequence: a ring draws in, the
+   shopping-bag line-art draws itself inside it, an elegant arc
+   sweeps around, a soft sheen passes, then everything lifts to
+   reveal the shop. Same white / ink palette as the storefront.
+   Isolated & standalone.
+   ============================================================ */
+
+:root {
+  --DOTTIE-intro-ink: #111111;
+  --DOTTIE-intro-muted: #6b6b6b;
+  --DOTTIE-intro-line: #eaeaea;
+  --DOTTIE-intro-surface: #fafafa;
+}
+
+/* If the intro already played this session (or the user prefers
+   reduced motion) the inline head script adds .DOTTIE-intro-skip so
+   the overlay never paints â€” keeping the homepage instant. */
+html.DOTTIE-intro-skip #DOTTIE-intro {
+  display: none !important;
+}
+
+.DOTTIE-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--paper, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  will-change: opacity;
+  cursor: pointer;
+}
+
+body.DOTTIE-intro-active {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Soft paper-depth backdrop. */
+.DOTTIE-intro__bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(125% 125% at 50% 38%, #ffffff 0%, #fafafa 55%, #f1f1f1 100%);
+  will-change: opacity;
+}
+
+/* A soft diagonal sheen that sweeps across once. */
+.DOTTIE-intro__shine {
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 3;
+  will-change: transform, opacity;
+}
+
+/* The animated composition. */
+.DOTTIE-intro__stage {
+  position: relative;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+.DOTTIE-intro__scene {
+  display: block;
+  width: clamp(170px, 32vw, 250px);
+  height: auto;
+  overflow: visible;
+}
+
+.DOTTIE-intro__ring {
+  fill: none;
+  stroke: rgba(17, 17, 17, 0.12);
+  stroke-width: 1.5;
+}
+
+.DOTTIE-intro__arc {
+  fill: none;
+  stroke: var(--DOTTIE-intro-ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 150 480;
+  transform-box: view-box;
+  transform-origin: 120px 120px;
+}
+
+.DOTTIE-intro__ink {
+  fill: none;
+  stroke: var(--DOTTIE-intro-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.DOTTIE-intro__shadow {
+  fill: rgba(17, 17, 17, 0.08);
+}
+
+/* The DOTTIE.YZ brand wordmark that rises beneath the mark. */
+.DOTTIE-intro__word {
+  margin-top: 20px;
+  text-align: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(20px, 3.4vw, 30px);
+  letter-spacing: 0.32em;
+  text-indent: 0.32em; /* balance the trailing letter-spacing */
+  color: var(--DOTTIE-intro-ink);
+  line-height: 1;
+  will-change: transform, opacity;
+}
+
+.DOTTIE-intro__word span {
+  color: var(--DOTTIE-intro-muted);
+  font-weight: 600;
+  margin: 0 0.06em;
+}
+
+/* Respect reduced motion as a hard safety net. */
+@media (prefers-reduced-motion: reduce) {
+  html:not(.DOTTIE-intro-skip) #DOTTIE-intro {
+    display: none !important;
+  }
+}
+

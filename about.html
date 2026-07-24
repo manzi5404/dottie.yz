@@ -3,190 +3,269 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us | Faith Over Fear Streetwear Rwanda</title>
-    <meta name="description" content="Faith Over Fear is a bold streetwear brand based in Kigali, Rwanda. Learn about our story, philosophy, and mission to create streetwear armor for the modern world." />
-    <meta name="keywords" content="Faith Over Fear about, streetwear Rwanda, Kigali clothing brand, F>F story, African streetwear brand" />
-    <meta property="og:title" content="About Us | Faith Over Fear" />
-    <meta property="og:description" content="Learn about Faith Over Fear - Rwanda's boldest streetwear brand." />
-    <meta property="og:type" content="website" />
-    <link rel="canonical" href="https://faithoverfearrw.netlify.app/about.html" />
+    <title>About Us | DOTTIE.YZ — Premium Streetwear from Kigali</title>
+    <meta name="description" content="DOTTIE.YZ is a premium streetwear brand from Kigali, Rwanda. Learn our story, vision, and design philosophy." />
     <link rel="stylesheet" href="/src/css/style.css">
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="bg-fof-black text-fof-white font-sans antialiased overflow-x-hidden" 
+<body class="bg-d-surface text-d-text-primary antialiased overflow-x-hidden"
       x-data="shopLogic()"
       x-init="init()"
       @scroll.window="scrolled = (window.pageYOffset > 50)"
       :class="{ 'scrolled': scrolled }">
 
-    <!-- Header -->
-    <header class="site-header" :class="{ 'scrolled': scrolled }" role="banner">
-      <div class="container">
-        <a href="/index.html" class="logo" aria-label="Faith Over Fear home">F<span class="logo-accent">&gt;</span>F</a>
-
-        <input type="checkbox" id="menu-toggle" class="menu-toggle" style="display: none;">
-        <label for="menu-toggle" class="hamburger" aria-hidden="true"><span></span></label>
-
-        <nav id="primary-nav" class="primary-nav" role="navigation">
-          <ul class="nav-list">
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/shop.html">New Arrivals</a></li>
-            <li><a href="/lookbook.html">Recent Drops</a></li>
-            <li><a href="/about.html">About</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-            <template x-if="!user">
-                <li><a href="/login.html" class="text-fof-accent">Login</a></li>
-            </template>
-            <template x-if="user">
-                <li class="relative group flex flex-col items-center">
-                    <button class="text-sm font-semibold text-fof-accent flex items-center space-x-2">
-                        <span x-text="user.name"></span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="absolute left-1/2 top-full w-48 h-2 -translate-x-1/2 bg-transparent pointer-events-auto"></div>
-                    <div class="absolute left-1/2 top-full mt-1 w-48 min-w-[160px] -translate-x-1/2 z-[999] bg-zinc-900 border border-zinc-800 shadow-xl flex flex-col overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto">
-                        <a href="/reservations.html"
-                                class="block w-full text-left px-4 py-3 text-sm font-medium text-white border-b border-zinc-800 hover:bg-zinc-800 transition-colors">
-                            My Reservations
-                        </a>
-                        <button @click="localStorage.removeItem('fof_token'); localStorage.removeItem('fof_user'); window.location.reload()"
-                                class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition-colors">
-                            Logout
-                        </button>
+    <!-- Shared Header -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-500" :class="scrolled ? 'bg-d-surface/80 backdrop-blur-xl border-b border-d-border' : 'bg-transparent'">
+        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="/index.html"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="h-8 md:h-10"></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/index.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Home</a>
+                <a href="/shop.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Shop</a>
+                <a href="/lookbook.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Lookbook</a>
+                <a href="/about.html" class="text-xs uppercase tracking-[0.2em] text-white transition-colors">About</a>
+                <a href="/contact.html" class="text-xs uppercase tracking-[0.2em] text-d-text-secondary hover:text-white nav-link-shine transition-colors">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <template x-if="user"><a href="/reservations.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block" x-text="user.name.split(' ')[0]"></a></template>
+                <template x-if="!user"><a href="/login.html" class="text-xs uppercase tracking-widest text-d-text-secondary hover:text-white transition-colors hidden md:block">Login</a></template>
+                <a href="/cart.html" class="text-d-text-secondary hover:text-white transition-colors relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007L8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+                    <span x-show="cartItems.length > 0" x-text="cartItems.length" class="absolute -top-2 -right-2 w-4 h-4 bg-d-accent text-white text-[9px] font-bold flex items-center justify-center"></span>
+                </a>
+                <label class="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5 transition-colors"><input type="checkbox" id="menu-toggle" class="hidden">
+                    <div\ class="w-8\ h-8\ flex\ flex-col\ justify-center\ items-center\ gap-1\.5"\ @click="mobileMenuOpen\ =\ !mobileMenuOpen">
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? 'opacity-0 scale-0' : ''"></div>
+                        <div class="w-7 h-0.5 bg-white transition-all" :class="mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''"></div>
                     </div>
-                </li>
-            </template>
-            <li class="cta"><a href="/cart.html">Cart</a></li>
-          </ul>
-        </nav>
-      </div>
+                </label>
+            </div>
+        </div>
     </header>
 
-<main class="pt-24 min-h-screen">
-        <div class="container mx-auto px-6 py-12">
-            <!-- Hero -->
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <h1 class="text-5xl md:text-7xl font-display font-bold uppercase tracking-tighter mb-8 animate-fade-in-up">
-                    Faith <span class="text-fof-accent">Over</span> Fear.
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" x-transition class="fixed inset-0 z-40 bg-d-surface/98 backdrop-blur-xl flex flex-col items-center justify-center" x-cloak>
+        <nav class="flex flex-col items-center space-y-8">
+            <a href="/index.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Home</a>
+            <a href="/shop.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Shop</a>
+            <a href="/lookbook.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Lookbook</a>
+            <a href="/about.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">About</a>
+            <a href="/contact.html" @click="mobileMenuOpen = false" class="text-3xl font-bold text-white hover:text-d-accent transition-colors">Contact</a>
+        </nav>
+    </div>
+
+    <main class="pt-[72px]">
+        <!-- Hero -->
+        <section class="relative min-h-[60vh] flex items-center overflow-hidden border-b border-d-border">
+            <div class="absolute inset-0 bg-gradient-to-br from-d-accent/5 via-transparent to-transparent"></div>
+            <div class="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-d-accent/5 rounded-full blur-[120px]"></div>
+            <div class="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full">
+                <span class="section-label reveal-up">Our Story</span>
+                <h1 class="section-heading-lg mt-6 max-w-4xl reveal-up">
+                    Built in <span class="text-d-accent">Kigali</span>.<br>Worn everywhere.
                 </h1>
-                <p class="text-xl text-gray-400 leading-relaxed font-light mb-6">
-                    We are the voice of the unheard. The strength of the struggle. The style of the spirit.
-                </p>
-                <p class="text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto">
-                    Faith Over Fear is a streetwear brand based in Kigali, Rwanda. F>F wasn't born in a boardroom. It was born in the quiet moments of doubt, where the only choice was to believe. We are a collective of dreamers, creators, and believers who refuse to let fear dictate our future. We don't just design streetwear; we design armor for the modern world.
+                <p class="text-d-text-secondary text-lg max-w-xl mt-8 leading-relaxed reveal-up">
+                    DOTTIE.YZ emerged from the intersection of Rwandan street culture and global fashion. We design for those who move differently.
                 </p>
             </div>
+        </section>
 
-            <!-- Content Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24">
-                <div class="relative aspect-square bg-fof-gray rounded-2xl overflow-hidden">
-                    <img src="images/Gemini_Generated_Image_5wmz0r5wmz0r5wmz.png" class="w-full h-full object-cover">
-                    <!-- Overlay Grid -->
-                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMEg0MFY0MEgwWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] opacity-30"></div>
+        <!-- Story -->
+        <section class="py-24 md:py-32">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 lg:order-1">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-d-accent reveal-up">Est. 2026</span>
+                        <h2 class="text-3xl md:text-4xl font-display font-bold mt-4 mb-8 leading-tight reveal-up">
+                            From the streets of Kigali to the world
+                        </h2>
+                        <div class="space-y-6 text-d-text-secondary leading-relaxed reveal-up">
+                            <p>We started with a simple belief: streetwear should be more than just oversized graphics. It should carry the weight of culture, the precision of craft, and the confidence of someone who knows exactly who they are.</p>
+                            <p>Every DOTTIE.YZ piece is designed in Kigali, informed by the energy of the city — from the murals of Kiyovu to the beats playing in downtown studios. We work with premium fabrics, precision cuts, and a design language that speaks to the modern creative.</p>
+                            <p>This isn't a trend. This is the code.</p>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2 aspect-[4/5] bg-d-surface-3 border border-d-border overflow-hidden img-zoom reveal-fade">
+                        <div class="w-full h-full bg-d-surface-3 flex items-center justify-center"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="w-2/3 h-2/3 object-contain opacity-30"></div>
+                    </div>
                 </div>
-                <div class="space-y-8">
-                    <h2 class="text-3xl font-display font-bold uppercase tracking-wide">Our Story</h2>
-                    <p class="text-gray-400">
-                        F>F started as a simple idea in 2024: what if your clothes could speak for you before you even said a word? What if a hoodie could be a shield?
-                    </p>
-                    <p class="text-gray-400">
-                        Founded by three friends dealing with the pressures of modern life—anxiety, uncertainty, and the noise of the grind—we turned to creativity as our outlet. We wanted to wear our conviction. We wanted to represent a mindset that says, "No matter what's in front of me, my faith is greater."
-                    </p>
-                    <p class="text-gray-400">
-                        From a garage setup to a global movement, F>F remains true to its roots: authentic, bold, and unashamed.
-                    </p>
-                    <div class="pt-4">
-                        <div class="flex space-x-12">
+            </div>
+        </section>
+
+        <!-- Values -->
+        <section class="py-24 md:py-32 border-t border-d-border bg-d-surface-2">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-20">
+                    <span class="section-label reveal-up">What Drives Us</span>
+                    <h2 class="section-heading mt-6 reveal-up">Design <span class="text-d-accent">Philosophy</span></h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-children">
+                    <div class="card-base card-hover p-8 md:p-10 group">
+                        <div class="w-12 h-12 border border-d-accent/30 flex items-center justify-center mb-8 group-hover:bg-d-accent/10 transition-colors">
+                            <svg class="w-6 h-6 text-d-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.236-1.143m0 0a3 3 0 005.78-1.128 2.25 2.25 0 012.4-2.245 4.5 4.5 0 00-8.4 2.245c0 .399.078.78.236 1.143m0 0a3 3 0 005.78 1.128 2.25 2.25 0 012.4 2.245 4.5 4.5 0 00-8.4-2.245c0-.399-.078-.78-.236-1.143"/></svg>
+                        </div>
+                        <h3 class="text-xl font-display font-bold uppercase tracking-wider mb-4">Precision Craft</h3>
+                        <p class="text-sm text-d-text-secondary leading-relaxed">Every seam, every stitch, every print position is deliberate. Premium heavyweight fabrics, reinforced construction, and finishes that last beyond the season.</p>
+                    </div>
+                    <div class="card-base card-hover p-8 md:p-10 group">
+                        <div class="w-12 h-12 border border-d-accent/30 flex items-center justify-center mb-8 group-hover:bg-d-accent/10 transition-colors">
+                            <svg class="w-6 h-6 text-d-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+                        </div>
+                        <h3 class="text-xl font-display font-bold uppercase tracking-wider mb-4">Global Identity</h3>
+                        <p class="text-sm text-d-text-secondary leading-relaxed">Rooted in Kigali, connected to the world. Our designs bridge local authenticity with international appeal — streetwear that translates across borders.</p>
+                    </div>
+                    <div class="card-base card-hover p-8 md:p-10 group">
+                        <div class="w-12 h-12 border border-d-accent/30 flex items-center justify-center mb-8 group-hover:bg-d-accent/10 transition-colors">
+                            <svg class="w-6 h-6 text-d-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-display font-bold uppercase tracking-wider mb-4">Creative Freedom</h3>
+                        <p class="text-sm text-d-text-secondary leading-relaxed">No templates. No safe choices. Every collection is an experiment in form, texture, and silhouette. We push boundaries because conformity is the opposite of style.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manifesto -->
+        <section class="py-24 md:py-32 border-t border-d-border">
+            <div class="max-w-5xl mx-auto px-6 text-center">
+                <blockquote class="text-3xl md:text-5xl lg:text-6xl font-display font-bold leading-[1.1] tracking-tight reveal-up">
+                    We are not a trend.<br>
+                    We are not a movement.<br>
+                    We are the <span class="text-d-accent">code</span>.
+                </blockquote>
+                <div class="w-16 h-px bg-d-accent mx-auto mt-12 reveal-fade"></div>
+            </div>
+        </section>
+
+        <!-- Quality -->
+        <section class="py-24 md:py-32 border-t border-d-border bg-d-surface-2">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="aspect-video bg-d-surface-3 border border-d-border overflow-hidden img-zoom reveal-fade">
+                        <div class="w-full h-full bg-d-surface-3 flex items-center justify-center"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="w-2/3 h-2/3 object-contain opacity-30"></div>
+                    </div>
+                    <div class="reveal-up">
+                        <span class="section-label">Quality & Craftsmanship</span>
+                        <h2 class="text-3xl md:text-4xl font-display font-bold mt-4 mb-8 leading-tight">
+                            Engineered to <span class="text-d-accent">endure</span>
+                        </h2>
+                        <div class="space-y-6 text-d-text-secondary leading-relaxed">
+                            <p>We source heavyweight French terry, ring-spun cotton, and custom knit fabrics. Our garments are pre-shrunk, enzyme-washed, and double-stitched at stress points.</p>
+                            <p>Screen-printed graphics use plastisol and water-based inks that survive 50+ washes. Zippers, drawcords, and hardware are specified for durability — because premium means forever, not for the season.</p>
+                        </div>
+                        <div class="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-d-border">
                             <div>
-                                <span class="block text-4xl font-bold text-fof-accent font-display">2024</span>
-                                <span class="text-xs uppercase tracking-widest text-gray-500">Established</span>
+                                <span class="text-3xl font-display font-bold text-d-accent">320</span>
+                                <span class="block text-xs text-d-text-muted uppercase tracking-widest mt-1">GSM Fabric</span>
                             </div>
                             <div>
-                                <span class="block text-4xl font-bold text-white font-display">Global</span>
-                                <span class="text-xs uppercase tracking-widest text-gray-500">Community</span>
+                                <span class="text-3xl font-display font-bold text-d-accent">50+</span>
+                                <span class="block text-xs text-d-text-muted uppercase tracking-widest mt-1">Wash Tested</span>
+                            </div>
+                            <div>
+                                <span class="text-3xl font-display font-bold text-d-accent">100%</span>
+                                <span class="block text-xs text-d-text-muted uppercase tracking-widest mt-1">Premium Cotton</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Philosophy Section -->
-            <div class="mb-24 text-center max-w-3xl mx-auto">
-                <h2 class="text-3xl font-display font-bold uppercase tracking-wide mb-12">Our Philosophy</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="p-6 border border-zinc-800 bg-zinc-900/50">
-                        <h3 class="text-xl font-bold text-white mb-2">Purpose</h3>
-                        <p class="text-sm text-gray-400">Every stitch, every print, every colorway is intentional. We blend abstract art with bold typography.</p>
+        <!-- Culture -->
+        <section class="py-24 md:py-32 border-t border-d-border">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="reveal-up">
+                        <span class="section-label">Streetwear Culture</span>
+                        <h2 class="text-3xl md:text-4xl font-display font-bold mt-4 mb-8 leading-tight">
+                            Born from the <span class="text-d-accent">culture</span>
+                        </h2>
+                        <div class="space-y-6 text-d-text-secondary leading-relaxed">
+                            <p>Streetwear isn't just clothing — it's a language. It's the way you walk into a room before you speak. The way you represent without trying.</p>
+                            <p>DOTTIE.YZ exists at the intersection of music, art, and urban life. We collaborate with photographers, DJs, and visual artists who share our vision. Every drop tells a story that extends beyond the garment itself.</p>
+                        </div>
                     </div>
-                    <div class="p-6 border border-zinc-800 bg-zinc-900/50">
-                        <h3 class="text-xl font-bold text-white mb-2">Quality</h3>
-                        <p class="text-sm text-gray-400">Faith deserves the best. Heavyweight cottons, puff prints, and precision cuts.</p>
-                    </div>
-                    <div class="p-6 border border-zinc-800 bg-zinc-900/50">
-                        <h3 class="text-xl font-bold text-white mb-2">Faith > Fear</h3>
-                        <p class="text-sm text-gray-400">It's an equation we live by. When the odds are stacked against you, add faith.</p>
+                    <div class="grid grid-cols-2 gap-4 reveal-fade">
+                        <div class="aspect-square bg-d-surface-3 border border-d-border overflow-hidden img-zoom">
+                            <div class="w-full h-full bg-d-surface-3 flex items-center justify-center"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="w-2/3 h-2/3 object-contain opacity-30"></div>
+                        </div>
+                        <div class="aspect-square bg-d-surface-3 border border-d-border overflow-hidden img-zoom mt-8">
+                            <div class="w-full h-full bg-d-surface-3 flex items-center justify-center"><img src="/logo2.jpeg" alt="DOTTIE.YZ" class="w-2/3 h-2/3 object-contain opacity-30"></div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-           
-
+        <!-- CTA -->
+        <section class="py-24 md:py-32 border-t border-d-border">
+            <div class="max-w-3xl mx-auto px-6 text-center">
+                <h2 class="section-heading reveal-up">Explore the <span class="text-d-accent">Collection</span></h2>
+                <p class="text-d-text-secondary mt-6 max-w-xl mx-auto leading-relaxed reveal-up">
+                    From heavyweight hoodies to precision-cut tees. Every piece carries the DOTTIE.YZ identity.
+                </p>
+                <div class="mt-10 reveal-up">
+                    <a href="/shop.html" class="btn-primary btn-shine">Shop Now</a>
+                </div>
             </div>
-        </main>
-<!-- Footer -->
-    <footer class="bg-fof-dark border-t border-fof-gray py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <h2 class="text-3xl font-display font-bold mb-4">F<span class="text-fof-accent">&gt;</span>F</h2>
-                    <p class="text-gray-400 text-sm max-w-sm">
-                        Faith over Fear. Streetwear for the bold, the believers, and the brave. Designed for the streets, inspired by the spirit.
-                    </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-d-surface-2 border-t border-d-border">
+        <div class="max-w-7xl mx-auto px-6 py-16 md:py-20">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-display font-bold mb-4">DOTTIE<span class="text-d-accent">.</span>YZ</h2>
+                    <p class="text-d-text-secondary text-sm max-w-sm leading-relaxed">Premium streetwear designed in Kigali, Rwanda. Creative freedom, precision craft, global identity.</p>
                     <div class="flex space-x-4 mt-6">
-                        <a href="https://www.instagram.com/faithoverfear.rw__/" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="Instagram">
-                             <!-- Instagram Icon -->
-                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        <a href="https://www.instagram.com/dottie.yz/" target="_blank" class="text-d-text-muted hover:text-white transition-colors">
+                            <span class="sr-only">Instagram</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         </a>
-                        <a href="mailto:faithoverfearsupport@gmail.com" class="text-gray-400 hover:text-fof-accent transition-colors" title="Email Us">
-                            <!-- Mail Icon -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        </a>
-                        <a href="https://tiktok.com/@faithoverfear_brand" target="_blank" class="text-gray-400 hover:text-fof-accent transition-colors" title="TikTok">
-                            <!-- TikTok Icon -->
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 3.13-1.12 5.74-3.57 7.6-1.66 1.28-3.75 1.75-5.83 1.57-4.13-.37-7.49-3.95-7.61-8.11-.11-3.9 2.78-7.35 6.64-7.95 1.05-.16 2.12-.13 3.17.13v3.94c-1.69-.64-3.69-.47-5.26.47-2.14 1.3-2.91 3.97-1.74 6.18 1.15 2.15 4.14 3.07 6.35 1.94 1.69-.87 2.69-2.61 2.69-4.52V4.54c1.7 1.25 3.79 1.69 5.86 1.22V.02h-3.96c-.05 0-.08.01-.13.01z"/></svg> 
+                        <a href="mailto:dottieyz01@gmail.com" class="text-d-text-muted hover:text-white transition-colors">
+                            <span class="sr-only">Email</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
                         </a>
                     </div>
                 </div>
-
-                <!-- Navigate Section -->
                 <div>
-                    <h3 class="text-white font-bold mb-4">Navigate</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/" class="hover:text-fof-accent transition-colors">Home</a></li>
-                        <li><a href="/shop.html" class="hover:text-fof-accent transition-colors">New Arrivals</a></li>
-                        <li><a href="/lookbook.html" class="hover:text-fof-accent transition-colors">Recent Drops</a></li>
-                        <li><a href="/about.html" class="hover:text-fof-accent transition-colors">About</a></li>
-                        <li><a href="/contact.html" class="hover:text-fof-accent transition-colors">Contact</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-5">Shop</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/shop.html" class="footer-link-hover">New Arrivals</a></li>
+                        <li><a href="/lookbook.html" class="footer-link-hover">Lookbook</a></li>
+                        <li><a href="/collections.html" class="footer-link-hover">Collections</a></li>
                     </ul>
                 </div>
-
-                <!-- Support Section -->
                 <div>
-                    <h3 class="text-white font-bold mb-4">Support</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="/faq.html" class="hover:text-fof-accent transition-colors">FAQ</a></li>
-                        <li><a href="/shipping.html" class="hover:text-fof-accent transition-colors">Deliveries & Returns</a></li>
-                        <li><a href="/terms.html" class="hover:text-fof-accent transition-colors">Terms</a></li>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-widest mb-5">Support</h3>
+                    <ul class="space-y-3 text-sm text-d-text-secondary">
+                        <li><a href="/faq.html" class="footer-link-hover">FAQ</a></li>
+                        <li><a href="/shipping.html" class="footer-link-hover">Shipping & Returns</a></li>
+                        <li><a href="/contact.html" class="footer-link-hover">Contact</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-zinc-800 mt-12 pt-8 text-center text-xs text-gray-600 uppercase tracking-widest">
-                &copy; 2026 Faith Over Fear. All Rights Reserved.
+            <div class="border-t border-d-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-d-text-muted text-xs">&copy; 2026 DOTTIE.YZ. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="/terms.html" class="text-xs text-d-text-muted hover:text-white transition-colors">Terms</a>
+                    <a href="/privacy.html" class="text-xs text-d-text-muted hover:text-white transition-colors">Privacy</a>
+                </div>
             </div>
-        </footer>
+        </div>
+    </footer>
+
     <script type="module" src="/src/js/main.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 

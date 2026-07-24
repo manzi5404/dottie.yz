@@ -1,0 +1,659 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DOTTIE.YZ — Monochrome Luxury System
+   White canvas · ink typography · generous whitespace
+   ============================================================ */
+
+:root {
+  --paper: #FFFFFF;
+  --surface: #FAFAFA;
+  --ink: #111111;
+  --muted: #6B6B6B;
+  --line: #EAEAEA;
+  --header-height: 84px;
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04);
+  --shadow-md: 0 8px 30px -12px rgba(17, 17, 17, 0.10);
+  --shadow-lg: 0 24px 60px -20px rgba(17, 17, 17, 0.18);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: -0.011em;
+    line-height: 1.55;
+  }
+
+  [x-cloak] { display: none !important; }
+
+  ::selection { background: var(--ink); color: #fff; }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    line-height: 1.05;
+  }
+
+  img { max-width: 100%; }
+}
+
+/* ============================================================
+   Components — shared design language (cascades everywhere)
+   ============================================================ */
+@layer components {
+
+  /* ---------- Buttons ---------- */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1.05rem 2.2rem;
+    border: 1px solid var(--ink);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease),
+      background 0.25s ease, color 0.25s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: #fff;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1.05rem 2.2rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.25s var(--ease), border-color 0.25s ease,
+      background 0.25s ease;
+  }
+  .btn-secondary:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- Header / Nav ---------- */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: var(--header-height);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transform: translateY(0);
+    transition: background 0.4s var(--ease), border-color 0.4s ease,
+      backdrop-filter 0.4s ease, height 0.4s ease;
+  }
+  .site-header.scrolled {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(180%) blur(18px);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    border-bottom-color: var(--line);
+    height: 72px;
+  }
+  .site-header.header-hidden { transform: translateY(-100%); }
+
+  .site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .site-header .logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .site-header .logo:hover { opacity: 0.6; }
+  .logo-accent { color: var(--ink); }
+
+  .nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0; padding: 0;
+    gap: 2.75rem;
+    align-items: center;
+  }
+  .nav-list a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    transition: color 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+  }
+  .nav-list a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: var(--ink);
+    transition: width 0.35s var(--ease);
+  }
+  .nav-list a:hover { color: var(--ink); }
+  .nav-list a:hover::after { width: 100%; }
+
+  .nav-list .cta a {
+    background: var(--ink);
+    color: #fff;
+    padding: 0.7rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: transform 0.3s var(--ease), opacity 0.3s ease;
+  }
+  .nav-list .cta a::after { display: none; }
+  .nav-list .cta a:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  .menu-toggle, .hamburger { display: none; }
+
+  @media (max-width: 1024px) {
+    .nav-list {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(420px, 100%);
+      height: 100vh;
+      background: #fff;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2rem;
+      padding: 3rem;
+      transition: right 0.5s var(--ease);
+      z-index: 999;
+      box-shadow: var(--shadow-lg);
+    }
+    .nav-list a { font-size: 1.1rem; }
+    .hamburger {
+      display: block;
+      z-index: 1001;
+      cursor: pointer;
+      padding: 10px;
+      margin-left: auto;
+    }
+    .hamburger span,
+    .hamburger span::before,
+    .hamburger span::after {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: var(--ink);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .hamburger span::before { content: ''; top: -8px; }
+    .hamburger span::after { content: ''; top: 8px; }
+    #menu-toggle:checked ~ .primary-nav .nav-list { right: 0; }
+    #menu-toggle:checked ~ .hamburger span { background: transparent; }
+    #menu-toggle:checked ~ .hamburger span::before { transform: rotate(45deg); top: 0; }
+    #menu-toggle:checked ~ .hamburger span::after { transform: rotate(-45deg); top: 0; }
+  }
+
+  /* ---------- Mobile Specific (max-width: 767px) ---------- */
+  @media (max-width: 767px) {
+    .site-header .container {
+      padding: 0 0.75rem;
+    }
+
+    .site-header .logo {
+      font-size: 1.5rem;
+    }
+
+    .nav-list a {
+      font-size: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+    }
+
+    .eyebrow {
+      font-size: 0.85rem;
+    }
+
+    .btn-primary, .btn-secondary {
+      font-size: 0.9rem;
+      padding: 1rem 1.5rem;
+      min-height: 44px;
+    }
+
+    .DOTTIE-product-card .name {
+      font-size: 1.1rem;
+    }
+
+    .DOTTIE-product-card .price {
+      font-size: 1rem;
+    }
+
+    .DOTTIE-product-card .info {
+      padding: 1.25rem 0.75rem 0.5rem;
+    }
+
+    .DOTTIE-product-card .tag {
+      font-size: 0.7rem;
+      padding: 0.35rem 0.7rem;
+    }
+
+    .DOTTIE-field {
+      font-size: 1rem;
+      padding: 0.9rem 1rem;
+    }
+
+    .DOTTIE-label {
+      font-size: 0.8rem;
+    }
+
+    .DOTTIE-card {
+      padding: 1.25rem;
+    }
+
+    .DOTTIE-modal-content {
+      max-width: 100%;
+      margin: 1rem;
+      border-radius: 12px;
+    }
+
+    .DOTTIE-modal-title {
+      font-size: 1.25rem;
+    }
+
+    /* Ensure floating featured card fits mobile */
+    .group.max-w-none {
+      margin: 0 -0.75rem;
+      width: calc(100% + 1.5rem);
+    }
+
+    .group.max-w-none [class*="aspect-"] {
+      border-radius: 0;
+    }
+  }
+
+  /* ---------- Forms ---------- */
+  .DOTTIE-field {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 1rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--ink);
+    border-radius: 10px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .DOTTIE-field::placeholder { color: #B0B0B0; }
+  .DOTTIE-field:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
+  }
+  .DOTTIE-label {
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-bottom: 0.55rem;
+  }
+
+  /* ---------- Cards ---------- */
+  .DOTTIE-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.75rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
+      border-color 0.3s ease;
+  }
+  .DOTTIE-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: #dcdcdc;
+  }
+
+  .DOTTIE-product-card {
+    display: block;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease);
+  }
+  .DOTTIE-product-card .media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--surface);
+    border-radius: 14px;
+  }
+  .DOTTIE-product-card .media img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease);
+  }
+  .DOTTIE-product-card:hover .media img { transform: scale(1.05); }
+  .DOTTIE-product-card .tag {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    background: var(--ink);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    z-index: 2;
+  }
+  .DOTTIE-product-card .info { padding: 1.1rem 0.25rem 0.25rem; }
+  .DOTTIE-product-card .name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .DOTTIE-product-card .price {
+    margin-top: 0.35rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  .hover-crossfade {
+    position: relative;
+  }
+  .hover-crossfade img {
+    transition: opacity 0.5s ease, transform 0.7s var(--ease);
+  }
+  .hover-crossfade .front {
+    position: relative;
+    z-index: 1;
+  }
+  .hover-crossfade .back {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0;
+  }
+  .DOTTIE-product-card:hover .hover-crossfade .front,
+  .hover-crossfade.flipped .front {
+    opacity: 0;
+  }
+  .DOTTIE-product-card:hover .hover-crossfade .back,
+  .hover-crossfade.flipped .back {
+    opacity: 1;
+  }
+
+  .flip-btn {
+    display: none;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+  .flip-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  @media (max-width: 767px) {
+    .flip-btn {
+      display: flex;
+    }
+  }
+
+  /* ---------- Modal / Drawer ---------- */
+  .DOTTIE-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: rgba(17, 17, 17, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .DOTTIE-modal-content {
+    position: relative;
+    z-index: 10001;
+    width: 100%;
+    max-width: 32rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+  }
+  .DOTTIE-modal-box { padding: 0; }
+  .DOTTIE-modal-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .DOTTIE-modal-close {
+    color: var(--muted);
+    transition: color 0.25s ease, transform 0.25s ease;
+    background: none; border: none; cursor: pointer;
+  }
+  .DOTTIE-modal-close:hover { color: var(--ink); transform: rotate(90deg); }
+
+  /* ---------- Section helpers ---------- */
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  .eyebrow {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+  }
+}
+
+@layer utilities {
+  main { padding-top: var(--header-height); }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s var(--ease) forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 3s ease-in-out infinite;
+  }
+  @keyframes pulseSlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+}
+
+/* ============================================================
+   THEME OVERRIDE LAYER
+   Flips the existing dark utility classes to the monochrome
+   light palette so every page shares one design system.
+   Loaded last → wins the cascade. Functional colours
+   (MoMo green, error red) are intentionally preserved.
+   ============================================================ */
+.bg-DOTTIE-black, .bg-DOTTIE-dark,
+.bg-zinc-900, .bg-zinc-950,
+.bg-black, .bg-black\/20 {
+  background-color: var(--paper) !important;
+}
+.bg-zinc-900\/20, .bg-zinc-900\/40, .bg-zinc-900\/50, .bg-zinc-900\/60,
+.bg-black\/20 {
+  background-color: rgba(17, 17, 17, 0.06) !important;
+}
+.bg-black\/40, .bg-black\/90 {
+  background-color: rgba(17, 17, 17, 0.5) !important;
+}
+.bg-zinc-800, .bg-zinc-800\/20, .bg-zinc-800\/30,
+.bg-zinc-700, .bg-DOTTIE-gray {
+  background-color: var(--surface) !important;
+}
+.bg-DOTTIE-accent {
+  background-color: var(--ink) !important;
+  color: #fff !important;
+}
+.bg-DOTTIE-accent\/5, .bg-DOTTIE-accent\/10, .bg-DOTTIE-accent\/20 {
+  background-color: rgba(17, 17, 17, 0.05) !important;
+}
+.bg-DOTTIE-white { background-color: var(--ink) !important; }
+
+.text-white, .text-zinc-100, .text-zinc-200, .text-zinc-300,
+.text-DOTTIE-white { color: var(--ink) !important; }
+.text-gray-400, .text-gray-500, .text-gray-600,
+.text-zinc-400, .text-zinc-500 { color: var(--muted) !important; }
+.text-gray-300 { color: var(--ink) !important; }
+.text-DOTTIE-accent { color: var(--ink) !important; }
+
+.border-zinc-800, .border-zinc-700, .border-zinc-800\/30, .border-zinc-800\/50,
+.border-DOTTIE-gray, .border-DOTTIE-accent\/20, .border-DOTTIE-accent\/20 {
+  border-color: var(--line) !important;
+}
+.divide-zinc-800\/50 > * + * { border-color: var(--line) !important; }
+
+.placeholder-gray-700::placeholder { color: #B0B0B0 !important; }
+
+/* Keep hover/focus states light — never revert to dark. */
+.hover\:bg-zinc-800:hover,
+.hover\:bg-zinc-900:hover,
+.group-hover\:bg-zinc-800:hover,
+.hover\:bg-zinc-800\/30:hover { background-color: var(--surface) !important; }
+.hover\:border-zinc-700:hover,
+.hover\:border-zinc-600:hover,
+.hover\:border-zinc-800:hover { border-color: var(--ink) !important; }
+.hover\:text-DOTTIE-accent:hover,
+.hover\:text-white:hover,
+.group-hover\:text-DOTTIE-accent:hover { color: var(--ink) !important; }
+.focus\:border-DOTTIE-accent:focus,
+.focus\:border-zinc-800:focus { border-color: var(--ink) !important; outline: none !important; }
+.hover\:bg-DOTTIE-accent:hover { background-color: var(--ink) !important; color: #fff !important; }
+.hover\:text-white:hover { color: #fff !important; }
+
+/* ---------- Hero (scoped — stays light-on-dark, immune to overrides) ---------- */
+.DOTTIE-hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: #0b0b0c;
+}
+.DOTTIE-hero__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.DOTTIE-hero__scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 100%);
+}
+.DOTTIE-hero__inner {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 1280px;
+  margin: 0 auto; padding: 0 2rem;
+}
+.DOTTIE-hero__eyebrow {
+  color: rgba(255,255,255,0.7) !important;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.28em;
+  margin-bottom: 1.5rem;
+}
+.DOTTIE-hero__title {
+  color: #fff !important;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 800; line-height: 0.95;
+  text-transform: uppercase; letter-spacing: -0.02em;
+}
+.DOTTIE-hero__title span { font-weight: 300; }
+.DOTTIE-hero__tagline {
+  color: rgba(255,255,255,0.85) !important;
+  font-size: clamp(1rem, 2.4vw, 1.4rem);
+  font-weight: 300; letter-spacing: 0.02em;
+  margin-top: 1.5rem; max-width: 34rem;
+}
+.DOTTIE-hero__actions {
+  margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
+}
+
+/* Ghost button — for use on dark hero imagery */
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  background: transparent; color: #fff;
+  font-weight: 600; font-size: 0.72rem; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 1.05rem 2.2rem;
+  border: 1px solid rgba(255,255,255,0.5); border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,0.1); }

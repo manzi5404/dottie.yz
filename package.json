@@ -1,17 +1,17 @@
 {
-  "name": "fof-web",
+  "name": "dottieyz-web",
   "version": "1.0.0",
   "type": "module",
-  "description": "F>F Ecommerce - Faith Over Fear",
-  "main": "server.js",
+  "description": "DOTTIE.YZ Premium Streetwear Ecommerce",
+  "main": "DOTTIE-backend/server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node DOTTIE-backend/server.js",
     "dev": "vite",
     "build": "npm run build:frontend && npm run build:admin",
     "build:frontend": "vite build",
     "build:admin": "npx vite build --config frontend/src/admin/drops/vite.config.js",
     "preview": "vite preview",
-    "backend": "nodemon server.js",
+    "backend": "nodemon DOTTIE-backend/server.js",
     "vercel-build": "npm run build"
   },
   "dependencies": {
