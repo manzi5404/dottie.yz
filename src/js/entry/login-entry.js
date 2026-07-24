@@ -16,10 +16,11 @@ window.authLogic = () => ({
             });
             
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message || 'Login failed');
+            if (!response.ok) throw new Error(data.message || data.error || 'Login failed');
 
-            localStorage.setItem('fof_token', data.token);
-            localStorage.setItem('fof_user', JSON.stringify({ name: data.name, id: data.userId }));
+            localStorage.setItem('dottie_token', data.access_token || data.token);
+            const userName = data.user?.name || data.name || this.email;
+            localStorage.setItem('dottie_user', JSON.stringify({ name: userName, id: data.user?.id || data.userId }));
             
             window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'Logged in successfully', type: 'success' } }));
             setTimeout(() => window.location.href = '/index.html', 1500);

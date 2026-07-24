@@ -1,22 +1,24 @@
 const settingsRepo = require('../repositories/settings.repository');
 const waitlistRepo = require('../repositories/waitlist.repository');
 const { sendEmail } = require('../../utils/email');
+const { supabaseAdmin } = require('../config/supabaseAdmin');
+const { NotFoundError } = require('../utils/errors');
 
 function buildClosedEmail({ imageUrls }) {
-  const subject = 'SITE CLOSED — YOU’RE ON THE LIST';
+  const subject = 'SITE CLOSED — YOU\'RE ON THE LIST';
   const images = Array.isArray(imageUrls) ? imageUrls : [];
-  const mainImage = images[0] || 'https://placehold.co/600x400/000000/FFFFFF/png?text=F%3EF';
+  const mainImage = images[0] || 'https://placehold.co/600x400/111827/FFFFFF/png?text=DOTTIE.YZ';
 
   const html = `
-    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #000; color: #fff; padding: 48px 40px; text-align: center; border: 1px solid #ff3b3b;">
-      <h1 style="font-family: 'Arial Black', Impact, sans-serif; letter-spacing: -2px; font-size: 52px; margin: 0; font-weight: 900;">F<span style="color: #ff3b3b;">&gt;</span>F</h1>
-      <p style="text-transform: uppercase; letter-spacing: 6px; font-size: 10px; color: #ff3b3b; margin: 6px 0 0; font-weight: 700;">We’re taking a short break</p>
+    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0a; color: #fff; padding: 48px 40px; text-align: center; border: 1px solid #333333;">
+      <h1 style="font-family: 'Arial Black', Impact, sans-serif; letter-spacing: -2px; font-size: 52px; margin: 0; font-weight: 900;">DOTTIE<span style="color: #B8956A;">.</span>YZ</h1>
+      <p style="text-transform: uppercase; letter-spacing: 6px; font-size: 10px; color: #B8956A; margin: 6px 0 0; font-weight: 700;">We're taking a short break</p>
 
       <div style="margin: 36px 0;">
         <img src="${mainImage}" alt="DOTTIE.YZ" style="width: 100%; max-height: 360px; object-fit: cover; border: 1px solid #222; border-radius: 12px;" />
       </div>
 
-      <h2 style="text-transform: uppercase; letter-spacing: 1px; font-size: 22px; margin: 0 0 12px; color: #fff; font-weight: 900;">You’ll be notified when we’re live again.</h2>
+      <h2 style="text-transform: uppercase; letter-spacing: 1px; font-size: 22px; margin: 0 0 12px; color: #fff; font-weight: 900;">You'll be notified when we're live again.</h2>
       <p style="font-size: 14px; color: #b3b3b3; margin: 0 0 28px; line-height: 1.6;">Thanks for joining. New drops will be announced the moment the site opens.</p>
     </div>
   `;
@@ -25,16 +27,16 @@ function buildClosedEmail({ imageUrls }) {
 }
 
 function buildLiveEmail({ shopUrl }) {
-  const subject = 'WE’RE OPEN — SHOP THE DROP';
+  const subject = 'WE\'RE OPEN — SHOP THE DROP';
   const html = `
-    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #000; color: #fff; padding: 48px 40px; text-align: center; border: 1px solid #ff3b3b;">
-      <h1 style="font-family: 'Arial Black', Impact, sans-serif; letter-spacing: -2px; font-size: 52px; margin: 0; font-weight: 900;">F<span style="color: #ff3b3b;">&gt;</span>F</h1>
-      <p style="text-transform: uppercase; letter-spacing: 6px; font-size: 10px; color: #ff3b3b; margin: 6px 0 0; font-weight: 700;">Now Open For Sale</p>
+    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0a; color: #fff; padding: 48px 40px; text-align: center; border: 1px solid #333333;">
+      <h1 style="font-family: 'Arial Black', Impact, sans-serif; letter-spacing: -2px; font-size: 52px; margin: 0; font-weight: 900;">DOTTIE<span style="color: #B8956A;">.</span>YZ</h1>
+      <p style="text-transform: uppercase; letter-spacing: 6px; font-size: 10px; color: #B8956A; margin: 6px 0 0; font-weight: 700;">Now Open For Sale</p>
 
       <h2 style="text-transform: uppercase; letter-spacing: 1px; font-size: 28px; margin: 22px 0 12px; color: #fff; font-weight: 900;">The wait is over.</h2>
-      <p style="font-size: 14px; color: #b3b3b3; margin: 0 0 28px; line-height: 1.6;">We’re officially live. Shop the collection while quantities last.</p>
+      <p style="font-size: 14px; color: #b3b3b3; margin: 0 0 28px; line-height: 1.6;">We're officially live. Shop the collection while quantities last.</p>
 
-      <a href="${shopUrl}" style="background: #ff3b3b; color: #fff; text-decoration: none; padding: 18px 48px; font-weight: 900; text-transform: uppercase; letter-spacing: 4px; font-size: 12px; display: inline-block; border-radius: 6px;">Shop Now</a>
+      <a href="${shopUrl}" style="background: #B8956A; color: #fff; text-decoration: none; padding: 18px 48px; font-weight: 900; text-transform: uppercase; letter-spacing: 4px; font-size: 12px; display: inline-block; border-radius: 6px;">Shop Now</a>
     </div>
   `;
 
@@ -57,16 +59,12 @@ async function broadcastSubscribers(req, res) {
           imageUrls = [];
         }
       } else {
-        // fallback comma split
         imageUrls = trimmed.split(',').map(s => s.trim()).filter(Boolean);
       }
     } else if (Array.isArray(closedImagesValue)) {
       imageUrls = closedImagesValue;
     }
 
-    // When the site is OPEN we announce to EVERY subscriber (reopening is an
-    // event everyone should hear, even those already notified while closed).
-    // When CLOSED we only confirm to newly-unnotified signups.
     const isLive = siteStatus === 'live';
     const rawEntries = isLive
       ? await waitlistRepo.findAll()
@@ -91,8 +89,6 @@ async function broadcastSubscribers(req, res) {
       ? buildLiveEmail({ shopUrl: `${shopUrl}` })
       : buildClosedEmail({ imageUrls });
 
-    // If Resend isn't configured we must NOT mark entries notified,
-    // otherwise they'd be permanently skipped without ever receiving an email.
     if (!hasResend) {
       return res.status(200).json({
         success: true,
@@ -137,4 +133,3 @@ async function broadcastSubscribers(req, res) {
 module.exports = {
   broadcastSubscribers,
 };
-

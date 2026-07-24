@@ -46,7 +46,6 @@ async function create(data) {
     .insert({
       name: data.name,
       email: data.email,
-      phone: data.phone || null,
       subject: data.subject,
       message: data.message,
       status: 'unread'

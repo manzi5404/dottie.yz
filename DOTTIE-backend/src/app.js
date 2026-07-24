@@ -24,6 +24,8 @@ const waitlistRoutes = require('./routes/waitlist.routes');
 const messageRoutes = require('./routes/message.routes');
 const settingsRoutes = require('./routes/settings.routes');
 const siteStatusRoutes = require('./routes/siteStatus.routes');
+const storeConfigRoutes = require('./routes/storeConfig.routes');
+const reservationRoutes = require('./routes/reservation.routes');
 
 const app = express();
 
@@ -71,6 +73,8 @@ app.use('/api/waitlist', waitlistRoutes);
 app.use('/api/contact', messageRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/site-status', siteStatusRoutes);
+app.use('/api/store-config', storeConfigRoutes);
+app.use('/api/reservations', reservationRoutes);
 
 
 // Upload routes (admin only)

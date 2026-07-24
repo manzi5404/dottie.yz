@@ -680,6 +680,14 @@ const shopLogic = () => ({
         } finally {
             this.loading = false;
         }
+    },
+
+    logout() {
+        localStorage.removeItem('dottie_token');
+        localStorage.removeItem('dottie_user');
+        this.user = null;
+        window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'Logged out successfully', type: 'success' } }));
+        setTimeout(() => window.location.href = '/index.html', 1000);
     }
 });
 

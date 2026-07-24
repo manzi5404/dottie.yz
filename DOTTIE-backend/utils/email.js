@@ -45,7 +45,7 @@ async function notifyNewDrop(userEmails, dropDetails) {
     const { title, name, description, image_url } = dropDetails;
     const dropName = title || name || 'New Collection';
     const dropDesc = description || 'Our latest collection has arrived. Premium streetwear from Kigali.';
-    const dropImage = image_url || 'https://placehold.co/600x400/000000/FFFFFF/png?text=F%3ef+NEW+DROP';
+    const dropImage = image_url || 'https://placehold.co/600x400/000000/FFFFFF/png?text=DOTTIE.YZ+NEW+DROP';
     const shopUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'https://DOTTIE.YZ.rw';
 
     const subject = `NEW DROP: ${dropName} - Now Live`;
@@ -123,7 +123,7 @@ async function notifyNewDrop(userEmails, dropDetails) {
 async function notifyLiveDrop(userEmails, dropDetails) {
     const { title, name, description, image_url } = dropDetails;
     const dropName = title || name || 'New Drop';
-    const dropImage = image_url || 'https://placehold.co/600x400/000000/FFFFFF/png?text=F%3EF+LIVE+NOW';
+    const dropImage = image_url || 'https://placehold.co/600x400/000000/FFFFFF/png?text=DOTTIE.YZ+LIVE+NOW';
     const shopUrl = process.env.CLIENT_URL || 'https://DOTTIE.YZ.rw';
 
     const subject = `🔥 ${dropName} IS LIVE NOW!`;
@@ -159,7 +159,7 @@ async function notifyReservation(userEmail, reservationData, productData) {
     const { fullName, phone, size, color, quantity, storeMode } = reservationData;
     const productName = productData?.name || 'Product';
     const productPrice = productData?.price ? `${productData.price.toLocaleString()} FRW` : 'N/A';
-    const productImage = (productData?.image_urls && productData.image_urls.length > 0) ? productData.image_urls[0] : 'https://placehold.co/400x400?text=F%3EF+Reservations';
+    const productImage = (productData?.image_urls && productData.image_urls.length > 0) ? productData.image_urls[0] : 'https://placehold.co/400x400?text=DOTTIE.YZ+Reservations';
 
     const subject = `RESERVATION CONFIRMED: ${productName}`;
     const html = `

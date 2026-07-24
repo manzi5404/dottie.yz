@@ -1,6 +1,6 @@
 const { useEffect, useMemo, useState } = React;
 
-const BASE_URL = "https://faith-over-fear-production.up.railway.app";
+const BASE_URL = "https://DOTTIE-backend-production.up.railway.app";
 
 const tokenStore = {
   get() {
@@ -31,7 +31,7 @@ const PageShell = ({ children }) => (
   <div className="min-h-screen">
     <header className="border-b border-slate-800 bg-slate-900">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <h1 className="text-xl font-semibold tracking-tight">F&gt;F Admin</h1>
+         <h1 className="text-xl font-semibold tracking-tight">DOTTIE.YZ Admin</h1>
         <nav className="flex items-center gap-4 text-sm text-slate-300">
           <a href="#/dashboard" className="hover:text-white">Dashboard</a>
           <button
