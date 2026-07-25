@@ -83,7 +83,7 @@
             <p class="text-gray-400 max-w-xl mb-16">Have a question about a drop, sizing, or collab? Reach out and we'll get back to you.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <form @submit.prevent="submitContact" class="space-y-6" x-data="{ sending: false, sent: false, error: '' }">
+                <form @submit.prevent="submitContact" class="space-y-6">
                     <div>
                         <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Name</label>
                         <input type="text" x-model="contactName" required class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-colors" placeholder="Your name">
@@ -107,7 +107,7 @@
                     <button type="submit" :disabled="sending" class="btn-primary w-full">
                         <span x-text="sending ? 'Sending...' : 'Send Message'"></span>
                     </button>
-                    <p x-show="sent" class="text-green-400 text-sm">Message sent successfully!</p>
+                    <p x-show="contactSent" class="text-green-400 text-sm">Message sent successfully!</p>
                     <p x-show="error" class="text-red-400 text-sm" x-text="error"></p>
                 </form>
 

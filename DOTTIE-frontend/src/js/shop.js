@@ -44,6 +44,8 @@ const shopLogic = () => ({
     },
     cartItems: [],
 
+    contactSent: false,
+
     contactName: '',
     contactEmail: '',
     contactPhone: '',
@@ -72,6 +74,7 @@ const res = await fetch(`${API_BASE_URL}/api/contact`, {
                 this.contactPhone = '';
                 this.contactSubject = '';
                 this.contactMessage = '';
+                this.contactSent = true;
             window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'Message sent successfully!', type: 'success' } }));
             // Debug: make sure the correct endpoint is hit
             console.log('[Contact Debug] POST /api/contact payload ok');
