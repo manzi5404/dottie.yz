@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+      (function () {
+        try {
+          var played = sessionStorage.getItem('dottie_intro_played') === '1';
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (played || reduced) document.documentElement.classList.add('DOTTIE-intro-skip');
+        } catch (e) {}
+        setTimeout(function () {
+          var el = document.getElementById('DOTTIE-intro');
+          if (el) el.remove();
+        }, 9000);
+        var apiBase = document.body && document.body.dataset && document.body.dataset.apiBaseUrl;
+        if (apiBase) window.API_BASE_URL = apiBase;
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | DOTTIE.YZ</title>
+    <link rel="stylesheet" href="/src/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body data-api-base-url="https://dottie.yz-mqgz.onrender.com" class="bg-DOTTIE-black text-DOTTIE-white font-sans antialiased overflow-x-hidden"
+      x-data="shopLogic()"
+      x-init="init()"
+      @scroll.window="scrolled = (window.pageYOffset > 50)"
+      :class="{ 'scrolled': scrolled }">
+
+    <header class="site-header" :class="{ 'scrolled': scrolled }" role="banner">
+    <script>
+      (function () {
+        try {
+          var played = sessionStorage.getItem('dottie_intro_played') === '1';
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (played || reduced) document.documentElement.classList.add('DOTTIE-intro-skip');
+        } catch (e) {}
+        setTimeout(function () {
+          var el = document.getElementById('DOTTIE-intro');
+          if (el) el.remove();
+        }, 9000);
+        var apiBase = document.body && document.body.dataset && document.body.dataset.apiBaseUrl;
+        if (apiBase) window.API_BASE_URL = apiBase;
+      })();
+    </script>
+      <div class="container">
+        <a href="/shop.html" class="logo" aria-label="DOTTIE.YZ home"><img src="/logo.jpeg" alt="DOTTIE.YZ" class="logo-image" /></a>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle" style="display: none;">
+        <label for="menu-toggle" class="hamburger" aria-hidden="true"><span></span></label>
+        <nav id="primary-nav" class="primary-nav" role="navigation">
+          <ul class="nav-list">
+            <li><a href="/shop.html">New Arrivals</a></li>
+            <li><a href="/lookbook.html">Lookbook</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+            <template x-if="!user">
+                <li><a href="/login.html" class="text-DOTTIE-accent">Login</a></li>
+            </template>
+            <template x-if="user">
+                <li class="relative group flex flex-col items-center">
+                    <button class="text-sm font-semibold text-DOTTIE-accent flex items-center space-x-2">
+                        <span x-text="user.name"></span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute left-1/2 top-full w-48 h-2 -translate-x-1/2 bg-transparent pointer-events-auto"></div>
+                    <div class="absolute left-1/2 top-full mt-1 w-48 min-w-[160px] -translate-x-1/2 z-[999] bg-zinc-900 border border-zinc-800 shadow-xl flex flex-col overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto"><button @click="localStorage.removeItem('dottie_token'); localStorage.removeItem('dottie_user'); window.location.reload()" class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-zinc-800 transition-colors">Logout</button>
+                    </div>
+                </li>
+            </template>
+            <li class="cta"><a href="/cart.html">Cart</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="pt-24 min-h-screen">
+        <div class="container mx-auto px-6 py-20">
+            <h1 class="text-5xl md:text-7xl font-display font-bold uppercase tracking-tight mb-4">Get in <span class="text-DOTTIE-accent">Touch</span></h1>
+            <p class="text-gray-400 max-w-xl mb-16">Have a question about a drop, sizing, or collab? Reach out and we'll get back to you.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <form @submit.prevent="submitContact" class="space-y-6">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Name</label>
+                        <input type="text" x-model="contactName" required class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-colors" placeholder="Your name">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Email</label>
+                        <input type="email" x-model="contactEmail" required class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-colors" placeholder="your@email.com">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Phone (optional)</label>
+                        <input type="tel" x-model="contactPhone" class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-colors" placeholder="+250 7XX XXX XXX">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Subject</label>
+                        <input type="text" x-model="contactSubject" required class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-colors" placeholder="What's this about?">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Message</label>
+                        <textarea x-model="contactMessage" rows="5" required class="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-DOTTIE-accent outline-none transition-colors resize-none" placeholder="How can we help?"></textarea>
+                    </div>
+                    <button type="submit" :disabled="sending" class="btn-primary w-full">
+                        <span x-text="sending ? 'Sending...' : 'Send Message'"></span>
+                    </button>
+                    <p x-show="contactSent" class="text-green-400 text-sm">Message sent successfully!</p>
+                    <p x-show="error" class="text-red-400 text-sm" x-text="error"></p>
+                </form>
+
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-[10px] uppercase tracking-widest text-DOTTIE-accent font-bold mb-2">Email</h3>
+                        <a href="mailto:DOTTIE.YZsupport@gmail.com" class="text-gray-300 hover:text-white transition-colors">DOTTIE.YZsupport@gmail.com</a>
+                    </div>
+                    <div>
+                        <h3 class="text-[10px] uppercase tracking-widest text-DOTTIE-accent font-bold mb-2">Socials</h3>
+                        <div class="flex space-x-6">
+                            <a href="https://www.instagram.com/DOTTIE.YZ.rw__/" target="_blank" class="text-gray-400 hover:text-DOTTIE-accent transition-colors">Instagram</a>
+                            <a href="https://tiktok.com/@DOTTIE.YZ_brand" target="_blank" class="text-gray-400 hover:text-DOTTIE-accent transition-colors">TikTok</a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-[10px] uppercase tracking-widest text-DOTTIE-accent font-bold mb-2">Location</h3>
+                        <p class="text-gray-400">Kigali, Rwanda</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-DOTTIE-dark border-t border-DOTTIE-gray py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="text-3xl font-display font-bold mb-4">F<span class="text-DOTTIE-accent">&gt;</span>F</h2>
+                    <p class="text-gray-400 text-sm max-w-sm">DOTTIE.YZ. Streetwear for the bold, the believers, and the brave.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Navigate</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/shop.html" class="hover:text-DOTTIE-accent transition-colors">New Arrivals</a></li>
+                        <li><a href="/lookbook.html" class="hover:text-DOTTIE-accent transition-colors">Lookbook</a></li>
+                        <li><a href="/about.html" class="hover:text-DOTTIE-accent transition-colors">Our Story</a></li>
+                        <li><a href="/contact.html" class="hover:text-DOTTIE-accent transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Support</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/faq.html" class="hover:text-DOTTIE-accent transition-colors">FAQ</a></li>
+                        <li><a href="/shipping.html" class="hover:text-DOTTIE-accent transition-colors">Deliveries & Returns</a></li>
+                        <li><a href="/terms.html" class="hover:text-DOTTIE-accent transition-colors">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-zinc-800 mt-12 pt-8 text-center text-xs text-gray-600 uppercase tracking-widest">&copy; 2026 DOTTIE.YZ. All Rights Reserved.</div>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/js/main.js"></script>
+</body>
+</html>
+
+
+
+
