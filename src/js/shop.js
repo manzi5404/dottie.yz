@@ -49,6 +49,7 @@ const shopLogic = () => ({
     },
     cartItems: [],
     flippedProduct: {},
+    contactSent: false,
 
     contactName: '',
     contactEmail: '',
@@ -76,6 +77,7 @@ const shopLogic = () => ({
                 this.contactPhone = '';
                 this.contactSubject = '';
                 this.contactMessage = '';
+                this.contactSent = true;
                 window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'Message sent successfully!', type: 'success' } }));
             } else {
                 window.dispatchEvent(new CustomEvent('notify', { detail: { message: data.error || 'Failed to send message', type: 'error' } }));

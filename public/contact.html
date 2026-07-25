@@ -131,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-                    <form @submit.prevent="submitContact" class="space-y-6 reveal-up" x-data="{ sending: false, sent: false }">
+                    <form @submit.prevent="submitContact" class="space-y-6 reveal-up">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-[10px] uppercase tracking-widest text-d-text-muted font-bold mb-3">First Name</label>
@@ -151,7 +151,7 @@
                             <textarea x-model="contactMessage" required rows="6" class="input-base resize-none" placeholder="Tell us what's on your mind..."></textarea>
                         </div>
                         <button type="submit" class="btn-primary btn-shine">Send Message</button>
-                        <p x-show="sent" class="text-green-400 text-sm">Message sent successfully!</p>
+                        <p x-show="contactSent" class="text-green-400 text-sm">Message sent successfully!</p>
                     </form>
                 </div>
             </div>
