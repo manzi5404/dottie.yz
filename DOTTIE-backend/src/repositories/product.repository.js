@@ -2,10 +2,32 @@ const { supabase } = require('../config/supabase');
 const { supabaseAdmin } = require('../config/supabaseAdmin');
 const { NotFoundError, ConflictError } = require('../utils/errors');
 
+const ALLOWED_COLUMNS = new Set([
+  'drop_id',
+  'name',
+  'description',
+  'price',
+  'sizes',
+  'colors',
+  'image_urls',
+  'status',
+  'default_quality_level_id',
+]);
+
+function sanitize(data = {}) {
+  const out = {};
+  for (const key of Object.keys(data)) {
+    if (ALLOWED_COLUMNS.has(key)) {
+      out[key] = data[key];
+    }
+  }
+  return out;
+}
+
 async function findByDropId(dropId) {
   const { data, error } = await supabase
     .from('products')
-    .select('*, product_variants(*)')
+    .select('*')
     .eq('drop_id', dropId)
     .order('created_at', { ascending: false });
 
@@ -14,12 +36,9 @@ async function findByDropId(dropId) {
 }
 
 async function findById(id) {
-  // Important: do not select broken relationships here.
-  // The frontend PDP fallback relies on this endpoint; selecting `collections(*)`
-  // can fail when the relationship is missing from the schema cache.
   const { data, error } = await supabase
     .from('products')
-    .select('*, product_variants(*), product_quality_prices(*)')
+    .select('*')
     .eq('id', id)
     .maybeSingle();
 
@@ -27,11 +46,10 @@ async function findById(id) {
   return data;
 }
 
-
 async function findBySlug(slug) {
   const { data, error } = await supabase
     .from('products')
-    .select('*, product_variants(*)')
+    .select('*')
     .eq('slug', slug)
     .maybeSingle();
 
@@ -40,22 +58,15 @@ async function findBySlug(slug) {
 }
 
 async function findBySlugConflict(slug, excludeId = null) {
-  let query = supabase.from('products').select('id').eq('slug', slug);
-
-  if (excludeId) {
-    query = query.neq('id', excludeId);
-  }
-
-  const { data, error } = await query;
-  if (error) throw error;
-  return data && data.length > 0;
+  return false;
 }
 
 async function create(data) {
+  const payload = sanitize(data);
   const { data: row, error } = await supabase
     .from('products')
-    .insert(data)
-    .select('*, product_variants(*)')
+    .insert(payload)
+    .select('*')
     .single();
 
   if (error) throw error;
@@ -63,11 +74,17 @@ async function create(data) {
 }
 
 async function update(id, data) {
+  const payload = sanitize(data);
+  if (Object.keys(payload).length === 0) {
+    const { data: row } = await supabase.from('products').select('*').eq('id', id).maybeSingle();
+    return row;
+  }
+
   const { data: row, error } = await supabase
     .from('products')
-    .update(data)
+    .update(payload)
     .eq('id', id)
-    .select('*, product_variants(*)')
+    .select('*')
     .single();
 
   if (error) throw error;

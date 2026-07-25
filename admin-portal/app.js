@@ -1,16 +1,16 @@
 const { useEffect, useMemo, useState } = React;
 
-const BASE_URL = "https://DOTTIE-backend-production.up.railway.app";
+const BASE_URL = "http://localhost:3000";
 
 const tokenStore = {
   get() {
-    return localStorage.getItem("ff_admin_token");
+    return localStorage.getItem("dottie_admin_token");
   },
   set(token) {
-    localStorage.setItem("ff_admin_token", token);
+    localStorage.setItem("dottie_admin_token", token);
   },
   clear() {
-    localStorage.removeItem("ff_admin_token");
+    localStorage.removeItem("dottie_admin_token");
   }
 };
 
@@ -60,15 +60,19 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await api.post("/api/admin/login", { email, password });
-      const token = response.data?.token || response.data?.accessToken;
+      const response = await api.post("/api/auth/login", { email, password });
+      const token = response.data?.access_token || response.data?.token;
+      const user = response.data?.user;
       if (!token) {
         throw new Error("Token missing from response");
+      }
+      if (!user || user.role !== 'admin') {
+        throw new Error("Admin access required. Contact support if you believe this is an error.");
       }
       tokenStore.set(token);
       window.location.hash = "#/dashboard";
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Login failed");
+      setError(err.response?.data?.error || err.response?.data?.message || err.message || "Login failed");
     } finally {
       setLoading(false);
     }

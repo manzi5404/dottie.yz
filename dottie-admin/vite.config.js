@@ -3,37 +3,34 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import fs from 'fs';
 
-// Build admin portal to ../../../dist/admin directory
-// __dirname is frontend/src/admin/drops
-// ../../../.. is the root project directory
-const outDir = path.resolve(__dirname, '../../../../dist/admin');
+const rootDir = path.resolve(__dirname, 'src/admin');
+const outDir = path.resolve(__dirname, 'dist/admin');
 
-// Ensure output directory exists
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }
 
 export default defineConfig({
-  root: __dirname,
+  root: rootDir,
   plugins: [vue()],
   base: '/admin/',
   build: {
     outDir: outDir,
     emptyOutDir: true,
     rollupOptions: {
-      input: path.resolve(__dirname, 'index.html')
+      input: path.resolve(rootDir, 'index.html')
     }
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './')
+      '@': rootDir
     }
   },
   server: {
-    port: 5174,
+    port: 5176,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
         secure: false
       }

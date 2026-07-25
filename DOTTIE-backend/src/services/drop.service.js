@@ -142,17 +142,11 @@ async function createDrop(data) {
     throw new ValidationError('Title is required');
   }
 
-  const slug = await ensureUniqueSlug(generateSlug(data.title));
   const payload = {
     title: data.title.trim(),
-    slug,
     description: data.description || null,
-    theme_scripture: data.theme_scripture || null,
-    hero_video: data.hero_video || null,
-    hero_image: data.hero_image || null,
     image_url: data.image_url || null,
     release_date: data.release_date || new Date().toISOString(),
-    close_date: data.close_date || null,
     status: data.status ? normalizeStatus(data.status) : (data.type === 'new-drop' || data.type === 'recent-drop' ? 'live' : 'upcoming'),
     type: data.type || 'recent-drop',
   };
@@ -165,25 +159,15 @@ async function createDrop(data) {
 
   if (data.products && Array.isArray(data.products)) {
     for (const product of data.products) {
-      const baseSlug = generateSlug(product.name || product.title || 'product');
-      let slug = baseSlug;
-      let counter = 1;
-      let isConflict = await productRepo.findBySlugConflict(slug);
-      while (isConflict) {
-        slug = `${generateSlug(product.name || product.title || 'product')}-${counter}`;
-        counter++;
-        isConflict = await productRepo.findBySlugConflict(slug);
-      }
-
-      const qualityLevelName = (product.default_quality_level || 'basic').toLowerCase();
+      const defaultQualityLevelName = (product.default_quality_level || 'basic').toLowerCase();
       const qualityLevelMap = { basic: 1, premium: 2, luxe: 3 };
-      const defaultQualityLevelId = qualityLevelMap[qualityLevelName] || 1;
+      const defaultQualityLevelId = qualityLevelMap[defaultQualityLevelName] || 1;
 
       const normalizedProduct = {
-        ...product,
         drop_id: drop.id,
-        slug,
         name: product.name || product.title || 'Untitled Product',
+        description: product.description || null,
+        price: parseFloat(product.price) || 0,
         status: data.status || payload.status,
         sizes: Array.isArray(product.sizes) ? product.sizes : [],
         colors: Array.isArray(product.colors) ? product.colors : [],
@@ -197,6 +181,7 @@ async function createDrop(data) {
       delete normalizedProduct.uploading;
       delete normalizedProduct.quality_prices;
       delete normalizedProduct.colorsInput;
+      delete normalizedProduct.slug;
       const createdProduct = await productRepo.create(normalizedProduct);
 
       await createQualityPrices(createdProduct.id, product.quality_prices);
@@ -262,21 +247,10 @@ async function updateDrop(id, data) {
     for (const product of data.products) {
       if (product.id && existingMap.has(product.id)) {
         incomingIds.add(product.id);
-        const baseSlug = generateSlug(product.name || product.title || 'product');
-        let slug = baseSlug;
-        let counter = 1;
-        let isConflict = await productRepo.findBySlugConflict(slug, product.id);
-        while (isConflict) {
-          slug = `${baseSlug}-${counter}`;
-          counter++;
-          isConflict = await productRepo.findBySlugConflict(slug, product.id);
-        }
-
         const normalizedProduct = {
           name: product.name || product.title || 'Untitled Product',
           description: product.description || null,
           price: parseFloat(product.price) || 0,
-          slug,
           status: data.status || updateData.status || existing.status,
           sizes: Array.isArray(product.sizes) ? product.sizes : [],
           colors: Array.isArray(product.colors) ? product.colors : [],
@@ -288,25 +262,16 @@ async function updateDrop(id, data) {
         delete normalizedProduct.uploading;
         delete normalizedProduct.quality_prices;
         delete normalizedProduct.colorsInput;
+        delete normalizedProduct.slug;
         await productRepo.update(product.id, normalizedProduct);
         await createQualityPrices(product.id, product.quality_prices);
         await syncProductVariants(product.id, normalizedProduct.colors, normalizedProduct.sizes, product.quantity);
       } else {
-        const baseSlug = generateSlug(product.name || product.title || 'product');
-        let slug = baseSlug;
-        let counter = 1;
-        let isConflict = await productRepo.findBySlugConflict(slug);
-        while (isConflict) {
-          slug = `${baseSlug}-${counter}`;
-          counter++;
-          isConflict = await productRepo.findBySlugConflict(slug);
-        }
-
         const normalizedProduct = {
-          ...product,
           drop_id: id,
-          slug,
           name: product.name || product.title || 'Untitled Product',
+          description: product.description || null,
+          price: parseFloat(product.price) || 0,
           status: data.status || updateData.status || existing.status,
           sizes: Array.isArray(product.sizes) ? product.sizes : [],
           colors: Array.isArray(product.colors) ? product.colors : [],
@@ -321,6 +286,7 @@ async function updateDrop(id, data) {
         delete normalizedProduct.uploading;
         delete normalizedProduct.quality_prices;
         delete normalizedProduct.colorsInput;
+        delete normalizedProduct.slug;
         const newProduct = await productRepo.create(normalizedProduct);
         await createQualityPrices(newProduct.id, product.quality_prices);
         await syncProductVariants(newProduct.id, normalizedProduct.colors, normalizedProduct.sizes, product.quantity);

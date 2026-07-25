@@ -1,13 +1,33 @@
 const { supabaseAdmin } = require('../config/supabaseAdmin');
 const { NotFoundError } = require('../utils/errors');
 
+const ALLOWED_COLUMNS = new Set([
+  'title',
+  'description',
+  'image_url',
+  'release_date',
+  'status',
+  'type',
+]);
+
+function sanitize(data = {}) {
+  const out = {};
+  for (const key of Object.keys(data)) {
+    if (ALLOWED_COLUMNS.has(key)) {
+      out[key] = data[key];
+    }
+  }
+  return out;
+}
+
 async function findActive() {
-  const { data, error } = await supabaseAdmin
+   const nowIso = new Date().toISOString();
+   const { data, error } = await supabaseAdmin
     .from('drops')
     .select('*')
     .eq('status', 'live')
-    .lte('release_date', new Date().toISOString())
-    .or('close_date.is.null,close_date.gt.' + new Date().toISOString())
+    .lte('release_date', nowIso)
+    .or('close_date.is.null,close_date.gt.' + nowIso)
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -40,26 +60,11 @@ async function findById(id) {
 }
 
 async function findBySlug(slug) {
-  const { data, error } = await supabaseAdmin
-    .from('drops')
-    .select('*')
-    .eq('slug', slug)
-    .maybeSingle();
-
-  if (error) throw error;
-  return data;
+  return null;
 }
 
 async function findSlugConflict(slug, excludeId = null) {
-  let query = supabaseAdmin.from('drops').select('id').eq('slug', slug);
-
-  if (excludeId) {
-    query = query.neq('id', excludeId);
-  }
-
-  const { data, error } = await query;
-  if (error) throw error;
-  return data && data.length > 0;
+  return false;
 }
 
 async function demotePreviousNewDrops(excludeId) {
@@ -75,9 +80,10 @@ async function demotePreviousNewDrops(excludeId) {
 }
 
 async function create(data) {
+    const payload = sanitize(data);
     const { data: row, error } = await supabaseAdmin
         .from('drops')
-        .insert(data)
+        .insert(payload)
         .select('*')
         .single();
 
@@ -86,9 +92,15 @@ async function create(data) {
 }
 
 async function update(id, data) {
+    const payload = sanitize(data);
+    if (Object.keys(payload).length === 0) {
+      const { data: row } = await supabaseAdmin.from('drops').select('*').eq('id', id).maybeSingle();
+      return row;
+    }
+
     const { data: row, error } = await supabaseAdmin
         .from('drops')
-        .update(data)
+        .update(payload)
         .eq('id', id)
         .select('*')
         .single();
@@ -98,12 +110,11 @@ async function update(id, data) {
 }
 
 async function activate(id) {
+    const nowIso = new Date().toISOString();
+    const payload = sanitize({ status: 'live', release_date: nowIso });
     const { data, error } = await supabaseAdmin
         .from('drops')
-        .update({ 
-            status: 'live',
-            release_date: new Date().toISOString()
-        })
+        .update(payload)
         .eq('id', id)
         .select('*')
         .single();

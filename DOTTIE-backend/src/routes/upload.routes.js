@@ -3,21 +3,19 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
-// Load Cloudinary config
 require('../config/cloudinary');
 
 const router = express.Router();
 
 const storage = multer.memoryStorage();
-const upload = multer({ 
+const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
     const ext = file.originalname.toLowerCase().split('.').pop();
     const hasValidExtension = allowedExtensions.includes('.' + ext);
-    
     if (allowedMimeTypes.includes(file.mimetype) || hasValidExtension) {
       cb(null, true);
     } else {
@@ -25,6 +23,10 @@ const upload = multer({
     }
   }
 });
+
+const asyncHandler = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
 
 async function uploadToCloudinary(buffer, folder = 'DOTTIE/admin') {
   return new Promise((resolve, reject) => {
@@ -42,13 +44,13 @@ async function uploadToCloudinary(buffer, folder = 'DOTTIE/admin') {
   });
 }
 
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', upload.single('file'), asyncHandler(async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, error: 'No file uploaded' });
     }
 
-    console.log('Uploading file:', req.file.originalname, 'Size:', req.file.size);
+    console.log('Uploading file:', req.file.originalname, 'Size:', req.file.size, 'MIME:', req.file.mimetype);
     
     const result = await uploadToCloudinary(req.file.buffer, 'DOTTIE/admin');
     
@@ -62,12 +64,13 @@ router.post('/', upload.single('file'), async (req, res) => {
       height: result.height
     });
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
-    res.status(500).json({ success: false, error: 'Upload failed: ' + error.message });
+    console.error('Upload handler error:', error);
+    const message = error && error.message ? error.message : 'Upload failed';
+    res.status(500).json({ success: false, error: message });
   }
-});
+}));
 
-router.post('/multiple', upload.array('files', 10), async (req, res) => {
+router.post('/multiple', upload.array('files', 10), asyncHandler(async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, error: 'No files uploaded' });
@@ -85,9 +88,10 @@ router.post('/multiple', upload.array('files', 10), async (req, res) => {
 
     res.status(200).json({ success: true, urls });
   } catch (error) {
-    console.error('Cloudinary multiple upload error:', error);
-    res.status(500).json({ success: false, error: 'Upload failed' });
+    console.error('Multiple upload handler error:', error);
+    const message = error && error.message ? error.message : 'Upload failed';
+    res.status(500).json({ success: false, error: message });
   }
-});
+}));
 
 module.exports = router;
