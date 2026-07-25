@@ -49,8 +49,12 @@ const allowedOrigins = [
   'http://127.0.0.1:5176',
   'http://localhost:5177',
   'http://127.0.0.1:5177',
+  'http://localhost:5178',
+  'http://127.0.0.1:5178',
   'http://localhost:8080',
   ...(process.env.CORS_ORIGIN ? String(process.env.CORS_ORIGIN).split(',').map(s => s.trim()).filter(Boolean) : []),
+  ...(process.env.FRONTEND_URL ? [String(process.env.FRONTEND_URL).trim()] : []),
+  ...(process.env.CLOUDFLARE_PAGES_URL ? [String(process.env.CLOUDFLARE_PAGES_URL).trim()] : []),
 ].filter(Boolean);
 
 app.use(cors({
