@@ -48,6 +48,7 @@ const shopLogic = () => ({
         reservation_enabled: false
     },
     cartItems: [],
+    flippedProduct: {},
 
     contactName: '',
     contactEmail: '',
@@ -140,23 +141,49 @@ const shopLogic = () => ({
     },
 
     resolveImage(product) {
-        if (!product) return '/placeholder.jpg';
+        if (!product) return '/logo2.jpeg';
         
-        // Handle images stored as stringified JSON or raw arrays
         let imgList = [];
         try {
             if (typeof product.image === 'string' && product.image.startsWith('[')) {
                 imgList = JSON.parse(product.image);
             } else if (Array.isArray(product.images)) {
                 imgList = product.images;
+            } else if (Array.isArray(product.image_urls)) {
+                imgList = product.image_urls;
             } else if (product.image) {
                 imgList = [product.image];
+            } else if (product.image_url) {
+                imgList = [product.image_url];
             }
         } catch (e) {
             console.error("Image resolution failed for product:", product.id, e);
         }
 
-        return (imgList && imgList.length > 0) ? imgList[0] : '/placeholder.jpg';
+        return (imgList && imgList.length > 0) ? imgList[0] : '/logo2.jpeg';
+    },
+
+    resolveBackImage(product) {
+        if (!product) return '/logo2.jpeg';
+        
+        let imgList = [];
+        try {
+            if (typeof product.image === 'string' && product.image.startsWith('[')) {
+                imgList = JSON.parse(product.image);
+            } else if (Array.isArray(product.images)) {
+                imgList = product.images;
+            } else if (Array.isArray(product.image_urls)) {
+                imgList = product.image_urls;
+            } else if (product.image) {
+                imgList = [product.image];
+            } else if (product.image_url) {
+                imgList = [product.image_url];
+            }
+        } catch (e) {
+            console.error("Back image resolution failed for product:", product.id, e);
+        }
+
+        return (imgList && imgList.length > 1) ? imgList[1] : (imgList && imgList.length > 0 ? imgList[0] : '/logo2.jpeg');
     },
 
     async init() {
@@ -224,6 +251,9 @@ const shopLogic = () => ({
                             const variants = p.product_variants || [];
                             const variantColors = [...new Set(variants.map(v => v.color).filter(Boolean))];
                             const variantSizes = [...new Set(variants.map(v => v.size).filter(Boolean))];
+                            const imageList = p.images || p.image_urls || [];
+                            const qualityList = p.product_quality_prices || p.quality_prices || [];
+                            const fallbackPrice = qualityList.length > 0 ? parseFloat(qualityList[0].price) : (parseFloat(p.price) || 0);
                             allProducts.push({
                                 ...p,
                                 dropName: drop.title || drop.name || '',
@@ -232,8 +262,9 @@ const shopLogic = () => ({
                                 showDetails: false,
                                 uiQuantity: 1,
                                 uiSize: p.sizes && p.sizes.length > 0 ? p.sizes[0] : "M",
-                                images: p.images || p.image_urls || [],
-                                quality_prices: p.product_quality_prices || p.quality_prices || [],
+                                images: imageList,
+                                price: fallbackPrice,
+                                quality_prices: qualityList,
                                 status: drop.status || "live",
                                 colors: variantColors.length > 0 ? variantColors : (Array.isArray(p.colors) ? p.colors : []),
                                 sizes: variantSizes.length > 0 ? variantSizes : (Array.isArray(p.sizes) ? p.sizes : [])
@@ -296,13 +327,15 @@ const shopLogic = () => ({
     get totalPrice() {
         if (!this.selectedProduct) return "0.00";
         const basePrice = this.modalQuality ? parseFloat(this.modalQuality.price) : parseFloat(this.selectedProduct.price);
-        return (basePrice * parseInt(this.modalQuantity)).toFixed(2);
+        const safePrice = !isNaN(basePrice) && isFinite(basePrice) ? basePrice : 0;
+        return (safePrice * parseInt(this.modalQuantity || 1)).toFixed(2);
     },
 
     get momoQuickPayAmount() {
         if (!this.activeProduct) return "0.00";
         const basePrice = this.modalQuality ? parseFloat(this.modalQuality.price) : parseFloat(this.activeProduct.price);
-        return (basePrice * parseInt(this.modalQuantity || 1)).toFixed(2);
+        const safePrice = !isNaN(basePrice) && isFinite(basePrice) ? basePrice : 0;
+        return (safePrice * parseInt(this.modalQuantity || 1)).toFixed(2);
     },
 
     toggleCategory(r) {
@@ -372,7 +405,12 @@ const shopLogic = () => ({
 
     get cartTotal() { return this.grandTotal; },
     get cartTotalRaw() {
-        return this.cartItems.reduce((acc, item) => acc + (parseFloat(item.price) * parseInt(item.quantity)), 0);
+        return this.cartItems.reduce((acc, item) => {
+            const price = parseFloat(item.price);
+            const qty = parseInt(item.quantity);
+            const lineTotal = (!isNaN(price) && !isNaN(qty)) ? price * qty : 0;
+            return acc + lineTotal;
+        }, 0);
     },
     get grandTotal() { return this.cartTotalRaw.toFixed(2); },
 
@@ -517,7 +555,7 @@ const shopLogic = () => ({
             const orderIdStr = createdOrderIds.length > 0 ? createdOrderIds.join(', ') : 'N/A';
             const message = `DOTTIE.YZ PAYMENT VERIFICATION\n----------------------------\nOrder ID: ${orderIdStr}\nCustomer: ${this.senderName}\nPhone: ${this.senderPhone}\n\nItems:\n${itemsList}\n\nTOTAL: ${total} FRW\n----------------------------\nI have already sent the payment. Please verify this order.`;
 
-            window.open(`https://wa.me/250791832523?text=${encodeURIComponent(message)}`, "_blank");
+            window.open(`https://wa.me/250799837030?text=${encodeURIComponent(message)}`, "_blank");
 
             if (isCartCheckout) {
                 this.cartItems = [];
@@ -545,7 +583,7 @@ const shopLogic = () => ({
 
             const fallbackMessage = `DOTTIE.YZ PAYMENT VERIFICATION (Direct)\n----------------------------\nCustomer: ${this.senderName}\nPhone: ${this.senderPhone}\n\nItems:\n${itemsList}\n\nTOTAL: ${total} FRW\n----------------------------\nI have already sent the payment for these items. Please verify and process my order.\nNote: Order creation encountered an issue. Please contact support with your order details.`;
 
-            window.open(`https://wa.me/250791832523?text=${encodeURIComponent(fallbackMessage)}`, "_blank");
+            window.open(`https://wa.me/250799837030?text=${encodeURIComponent(fallbackMessage)}`, "_blank");
 
             if (isCartCheckout) {
                 this.cartItems = [];
@@ -581,6 +619,11 @@ const shopLogic = () => ({
         const effectivePrice = qualityLevel ? parseFloat(qualityLevel.price) : parseFloat(product.price);
         const qualityName = qualityLevel ? qualityLevel.quality_name : null;
         const qualityLevelId = qualityLevel ? qualityLevel.quality_level_id : null;
+
+        if (isNaN(effectivePrice) || effectivePrice <= 0) {
+            window.dispatchEvent(new CustomEvent("notify", { detail: { message: "Product price is not available.", type: "error" } }));
+            return;
+        }
 
         const existingItemIndex = this.cartItems.findIndex(item =>
             item.id === product.id &&

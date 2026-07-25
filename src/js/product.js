@@ -104,13 +104,22 @@ const productLogic = () => ({
             this.relatedItems = products
                 .filter(p => p.dropType === this.product.dropType && p.id !== this.product.id)
                 .slice(0, 4);
+
+            if (!this.product.images && this.product.image_urls) {
+                this.product.images = this.product.image_urls;
+            }
         }
     },
 
     get mainImage() {
-        return this.product && this.product.images[this.currentImage]
-            ? this.product.images[this.currentImage]
-            : "";
+        if (!this.product) return "";
+        const imgs = this.product.images || this.product.image_urls || [];
+        return imgs[this.currentImage] || imgs[0] || "";
+    },
+
+    get productImages() {
+        if (!this.product) return [];
+        return this.product.images || this.product.image_urls || [];
     },
 
     get dynamicPrice() {

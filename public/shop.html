@@ -13,6 +13,42 @@
     <link rel="stylesheet" href="/src/css/style.css">
     <style>
         [x-cloak] { display: none !important; }
+
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        .hover-crossfade img:last-child {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .hover-crossfade:hover img:last-child {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-d-surface text-d-text-primary font-sans antialiased overflow-x-hidden"
@@ -137,18 +173,28 @@
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <template x-for="product in filteredProducts" :key="product.id">
-                        <div class="group cursor-pointer"
+                        <div class="group cursor-pointer flip-card"
+                             :class="{ 'flipped': flippedProduct[product.id] }"
+                             @mouseenter="flippedProduct[product.id] = true"
+                             @mouseleave="flippedProduct[product.id] = false"
                              @click="window.location.href='/product.html?id=' + product.id">
                             <div class="relative aspect-[3/4] overflow-hidden bg-d-surface-3 mb-4">
-                                <img :src="resolveImage(product)" :alt="product.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                                <div class="flip-card-inner h-full w-full">
+                                    <div class="flip-card-front bg-d-surface-3">
+                                        <img :src="resolveImage(product)" :alt="product.name" class="w-full h-full object-cover transition-transform duration-700" @error="$event.target.src='/logo2.jpeg'">
+                                    </div>
+                                    <div class="flip-card-back bg-d-surface-3">
+                                        <img :src="resolveBackImage(product)" :alt="product.name + ' back view'" class="w-full h-full object-cover" @error="$event.target.src='/logo2.jpeg'">
+                                    </div>
+                                </div>
+                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center z-10">
                                     <span class="bg-white text-black font-bold uppercase tracking-[0.2em] text-xs px-6 py-3 opacity-0 group-hover:opacity-100 transition-all duration-300">Quick View</span>
                                 </div>
-                                <div class="absolute top-4 left-4 bg-d-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest">New</div>
+                                <div class="absolute top-4 left-4 bg-d-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">New</div>
                             </div>
                             <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
                             <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category"></p>
-                            <p class="text-sm font-mono text-d-text-secondary" x-text="product.price.toLocaleString() + ' FRW'"></p>
+                            <p class="text-sm font-mono text-d-text-secondary" x-text="(product.price || product.quality_prices?.[0]?.price || 0).toLocaleString() + ' FRW'"></p>
                         </div>
                     </template>
                 </div>
@@ -180,26 +226,36 @@
                 <p class="text-d-text-secondary text-lg max-w-2xl mb-12" x-text="selectedDrop.description || ''"></p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <template x-for="product in selectedDropProducts" :key="product.id">
-                        <div class="group cursor-pointer"
+                        <div class="group cursor-pointer flip-card"
+                             :class="{ 'flipped': flippedProduct[product.id] }"
+                             @mouseenter="flippedProduct[product.id] = true"
+                             @mouseleave="flippedProduct[product.id] = false"
                              @click="window.location.href='/product.html?id=' + product.id">
-                            <div class="relative aspect-[3/4] overflow-hidden bg-d-surface-3 mb-4">
-                                <img :src="resolveImage(product)" :alt="product.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                                    <span class="bg-white text-black font-bold uppercase tracking-[0.2em] text-xs px-6 py-3 opacity-0 group-hover:opacity-100 transition-all duration-300">Quick View</span>
-                                </div>
-                                <div class="absolute top-4 left-4 bg-d-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest">New</div>
-                            </div>
-                            <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
-                            <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category || selectedDrop.title"></p>
-                            <p class="text-sm font-mono text-d-text-secondary" x-text="product.price.toLocaleString() + ' FRW'"></p>
-                        </div>
-                    </template>
-                </div>
-                <div x-show="selectedDropProducts.length === 0" class="text-center py-20">
-                    <p class="text-d-text-muted text-sm">No products in this drop yet.</p>
-                </div>
-            </div>
-        </section>
+                             <div class="relative aspect-[3/4] overflow-hidden bg-d-surface-3 mb-4">
+                                 <div class="flip-card-inner h-full w-full">
+                                     <div class="flip-card-front bg-d-surface-3">
+                                         <img :src="resolveImage(product)" :alt="product.name" class="w-full h-full object-cover transition-transform duration-700" @error="$event.target.src='/logo2.jpeg'">
+                                     </div>
+                                     <div class="flip-card-back bg-d-surface-3">
+                                         <img :src="resolveBackImage(product)" :alt="product.name + ' back view'" class="w-full h-full object-cover" @error="$event.target.src='/logo2.jpeg'">
+                                     </div>
+                                 </div>
+                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center z-10">
+                                     <span class="bg-white text-black font-bold uppercase tracking-[0.2em] text-xs px-6 py-3 opacity-0 group-hover:opacity-100 transition-all duration-300">Quick View</span>
+                                 </div>
+                                 <div class="absolute top-4 left-4 bg-d-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">New</div>
+                             </div>
+                             <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
+                             <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category || selectedDrop.title"></p>
+                             <p class="text-sm font-mono text-d-text-secondary" x-text="(product.price || product.quality_prices?.[0]?.price || 0).toLocaleString() + ' FRW'"></p>
+                         </div>
+                     </template>
+                 </div>
+                 <div x-show="selectedDropProducts.length === 0" class="text-center py-20">
+                     <p class="text-d-text-muted text-sm">No products in this drop yet.</p>
+                 </div>
+             </div>
+         </section>
 
     </main>
 
@@ -318,10 +374,10 @@
                 <div class="space-y-4">
                     <h4 class="text-[10px] font-bold uppercase tracking-[0.2em] text-d-accent">2. Payment Details</h4>
                     <div class="border border-d-border bg-d-surface-3">
-                        <div class="group flex cursor-pointer items-center justify-between p-4 transition-colors hover:bg-d-surface-2" @click="copyToClipboard('*182*1*1*0791832523#', 'Number')">
+                        <div class="group flex cursor-pointer items-center justify-between p-4 transition-colors hover:bg-d-surface-2" @click="copyToClipboard('*182*8*1*2182278#', 'Number')">
                             <div>
                                 <span class="mb-1 block text-[10px] font-bold uppercase tracking-widest text-d-text-muted">To (Store Number)</span>
-                                <span class="font-mono text-lg font-bold tracking-wider text-d-text-primary">*182*1*1*0791832523#</span>
+                                <span class="font-mono text-lg font-bold tracking-wider text-d-text-primary">*182*8*1*2182278#</span>
                             </div>
                             <div class="relative flex items-center gap-2 rounded bg-d-surface-2 px-3 py-2 text-[10px] font-bold uppercase tracking-widest transition-all group-hover:bg-d-accent group-hover:text-white">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>

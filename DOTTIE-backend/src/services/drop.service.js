@@ -30,24 +30,28 @@ async function createQualityPrices(productId, qualityPrices) {
 }
 
 async function syncProductVariants(productId, colors, sizes, quantity = 10) {
-  const colorList = Array.isArray(colors) ? colors.filter(Boolean) : [];
-  const sizeList = Array.isArray(sizes) ? sizes.filter(Boolean) : [];
-  if (colorList.length === 0 || sizeList.length === 0) return;
+  try {
+    const colorList = Array.isArray(colors) ? colors.filter(Boolean) : [];
+    const sizeList = Array.isArray(sizes) ? sizes.filter(Boolean) : [];
+    if (colorList.length === 0 || sizeList.length === 0) return;
 
-  const variantsService = require('./variant.service');
-  await productRepo.deleteVariants(productId);
-  const variantPayload = [];
-  for (const color of colorList) {
-    for (const size of sizeList) {
-      const safeColor = String(color).trim();
-      const safeSize = String(size).trim();
-      if (!safeColor || !safeSize) continue;
-      const sku = `PROD-${productId}-${safeColor.replace(/[^a-zA-Z0-9]/g, '')}-${safeSize.replace(/[^a-zA-Z0-9]/g, '')}`;
-      variantPayload.push({ color: safeColor, size: safeSize, sku, stock: Number.isFinite(quantity) ? Math.max(0, Number(quantity)) : 10 });
+    const variantsService = require('./variant.service');
+    await productRepo.deleteVariants(productId);
+    const variantPayload = [];
+    for (const color of colorList) {
+      for (const size of sizeList) {
+        const safeColor = String(color).trim();
+        const safeSize = String(size).trim();
+        if (!safeColor || !safeSize) continue;
+        const sku = `PROD-${productId}-${safeColor.replace(/[^a-zA-Z0-9]/g, '')}-${safeSize.replace(/[^a-zA-Z0-9]/g, '')}`;
+        variantPayload.push({ color: safeColor, size: safeSize, sku, stock: Number.isFinite(quantity) ? Math.max(0, Number(quantity)) : 10 });
+      }
     }
-  }
-  if (variantPayload.length > 0) {
-    await variantsService.createVariants(productId, variantPayload);
+    if (variantPayload.length > 0) {
+      await variantsService.createVariants(productId, variantPayload);
+    }
+  } catch (_) {
+    // table may not exist yet; fail silently
   }
 }
 

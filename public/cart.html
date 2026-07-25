@@ -105,8 +105,8 @@
                                         <button @click="updateQuantity(index, 1)" class="w-8 h-8 flex items-center justify-center hover:bg-d-surface-3 transition-colors text-d-text-secondary text-sm">+</button>
                                     </div>
                                     <div class="text-right ml-auto">
-                                        <p class="text-xs text-d-text-muted font-mono" x-text="item.price.toLocaleString() + ' FRW ea'"></p>
-                                        <p class="text-lg font-bold font-mono text-white" x-text="(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2) + ' FRW'"></p>
+                                        <p class="text-xs text-d-text-muted font-mono" x-text="(parseFloat(item.price) || 0).toLocaleString() + ' FRW ea'"></p>
+                                        <p class="text-lg font-bold font-mono text-white" x-text="((parseFloat(item.price) || 0) * parseInt(item.quantity || 1)).toFixed(2) + ' FRW'"></p>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                         <div class="space-y-4 mb-8">
                             <div class="flex justify-between text-sm text-d-text-secondary">
                                 <span>Subtotal</span>
-                                <span class="text-white font-mono" x-text="cartTotal + ' FRW'"></span>
+                                <span class="text-white font-mono" x-text="(parseFloat(cartTotal || 0)).toFixed(2) + ' FRW'"></span>
                             </div>
                             <div class="flex justify-between text-sm text-d-text-secondary">
                                 <span>Delivery</span>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="flex justify-between items-end border-t border-d-border pt-6 mb-8">
                             <span class="font-bold uppercase tracking-widest text-sm">Total</span>
-                            <span class="text-3xl font-display font-bold text-white font-mono" x-text="grandTotal + ' FRW'"></span>
+                             <span class="text-3xl font-display font-bold text-white font-mono" x-text="(parseFloat(grandTotal || 0)).toFixed(2) + ' FRW'"></span>
                         </div>
                         <template x-if="isLiveMode()">
                             <button @click="initPayment(null)" class="w-full btn-primary flex items-center justify-center space-x-2">
@@ -187,7 +187,7 @@
                         </div>
                         <div class="sm:col-span-2 space-y-1">
                             <label class="block text-[10px] uppercase tracking-widest text-d-text-muted mb-1.5 font-bold">Amount to Pay (FRW)</label>
-                            <div class="w-full min-h-[48px] flex items-center bg-d-surface-2 border border-d-border px-3 py-3 text-sm text-d-accent font-bold" x-text="(selectedProduct ? totalPrice : grandTotal) + ' FRW'"></div>
+                             <div class="w-full min-h-[48px] flex items-center bg-d-surface-2 border border-d-border px-3 py-3 text-sm text-d-accent font-bold" x-text="((selectedProduct ? totalPrice : grandTotal) || '0.00') + ' FRW'"></div>
                         </div>
                     </div>
                 </div>
@@ -195,10 +195,10 @@
                 <div class="space-y-4">
                     <h4 class="text-[10px] uppercase tracking-[0.2em] text-d-accent font-bold">2. Payment Details</h4>
                     <div class="bg-d-surface/40 border border-d-border divide-y divide-d-border/50">
-                        <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 cursor-pointer" @click="copyToClipboard('*182*1*1*0791832523#', 'Number')">
+                        <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 cursor-pointer" @click="copyToClipboard('*182*8*1*2182278#', 'Number')">
                             <div>
                                 <span class="block text-[10px] text-d-text-muted uppercase font-bold tracking-widest mb-1">To (Store Number)</span>
-                                <span class="font-mono text-white text-lg font-bold tracking-wider">*182*1*1*0791832523#</span>
+                                <span class="font-mono text-white text-lg font-bold tracking-wider">*182*8*1*2182278#</span>
                             </div>
                             <div class="flex items-center space-x-2 px-3 py-2 bg-d-surface-3 text-[10px] uppercase font-bold tracking-widest transition-all hover:bg-d-accent hover:text-white">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
@@ -214,7 +214,7 @@
                         <template x-if="selectedProduct">
                             <div class="flex justify-between items-start text-sm">
                                 <span class="text-d-text-secondary max-w-[70%]" x-text="selectedProduct.name + ' (' + modalSize + ') x' + modalQuantity"></span>
-                                <span class="font-mono font-bold" x-text="(parseFloat(selectedProduct.price) * parseInt(modalQuantity)).toFixed(2) + ' FRW'"></span>
+                                <span class="font-mono font-bold" x-text="((parseFloat(selectedProduct.price) || 0) * parseInt(modalQuantity || 1)).toFixed(2) + ' FRW'"></span>
                             </div>
                         </template>
                         <template x-if="!selectedProduct">
