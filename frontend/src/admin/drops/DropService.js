@@ -194,8 +194,7 @@ const DropService = {
 
     updateOrderStatus: async (id, status) => {
         try {
-            const API_BASE = import.meta.env.VITE_API_URL || 'https://dottie-backend.onrender.com';
-            const response = await axios.put(`${API_BASE}/api/admin/orders/${id}/status`, { status });
+            const response = await axios.put(`/api/orders/${id}/status`, { status });
             return response.data;
         } catch (error) {
             console.error('Error updating order status:', error);

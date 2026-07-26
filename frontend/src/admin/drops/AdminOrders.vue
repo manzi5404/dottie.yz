@@ -112,13 +112,13 @@ import DropService from './DropService';
 const orders = ref([]);
 const emit = defineEmits(['updated']);
 const error = ref('');
-const orderStatuses = ['pending_payment', 'pending', 'confirmed', 'completed', 'cancelled'];
+const orderStatuses = ['pending_payment', 'paid', 'processing', 'shipped', 'completed', 'cancelled'];
 
 const fetchOrders = async () => {
   error.value = '';
   try {
     const data = await DropService.getOrders();
-    orders.value = Array.isArray(data) ? data.filter(order => (order.payment_method || '').toLowerCase() === 'momo') : [];
+    orders.value = Array.isArray(data) ? data : [];
   } catch (err) {
     console.error('Failed to load orders:', err);
     error.value = err?.response?.data?.message || err?.message || 'Failed to load orders. Check console for details.';
@@ -194,3 +194,5 @@ const formatCurrency = (value) => `${Number(value || 0).toFixed(2)} FRW`;
 
 onMounted(fetchOrders);
 </script>
+
+

@@ -31,7 +31,7 @@ async function createOrder(orderData) {
                 user_id, product_id, drop_id, product_name, size, color,
                 quantity, quality_level_id, price_at_purchase, total_price,
                 status, payment_method, customer_name, customer_email, phone_number
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pending', $11, $12, $13, $14)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pending_payment', $11, $12, $13, $14)
             RETURNING id`,
             [
                 user_id || null,
@@ -184,3 +184,4 @@ module.exports = {
     getAllOrders,
     updateOrderStatus
 };
+
