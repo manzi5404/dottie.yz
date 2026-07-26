@@ -31,6 +31,11 @@ const signup = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
+        if (!isAdmin(email)) {
+            authLog('ðš« authController.signup unauthorized admin attempt', { email });
+            return res.status(403).json({ message: 'Unauthorized: Admin access only' });
+        }
+
         const password_hash = await bcrypt.hash(password, 12);
         const userId = await userModel.createUser({ email, password_hash, name });
 
@@ -52,6 +57,15 @@ const signup = async (req, res) => {
     }
 };
 
+const ADMIN_EMAILS = new Set(
+    (process.env.ADMIN_EMAILS || '')
+        .split(',')
+        .map(e => e.trim().toLowerCase())
+        .filter(Boolean)
+);
+
+const isAdmin = (email) => ADMIN_EMAILS.has(email.toLowerCase());
+
 const login = async (req, res) => {
     authLog('âš™ï¸ authController.login start', { email: req.body.email });
     try {
@@ -59,6 +73,11 @@ const login = async (req, res) => {
 
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required' });
+        }
+
+        if (!isAdmin(email)) {
+            authLog('ðŸš« authController.login unauthorized admin attempt', { email });
+            return res.status(403).json({ message: 'Unauthorized: Admin access only' });
         }
 
         const user = await userModel.getUserByEmail(email);
@@ -176,6 +195,11 @@ const googleLogin = async (req, res) => {
         }
 
         const { name, email, sub: google_id } = ticket.getPayload();
+
+    if (!isAdmin(email)) {
+        authLog('ðş« authController.googleLogin unauthorized admin attempt', { email });
+        return res.status(403).json({ success: false, message: 'Unauthorized: Admin access only' });
+    }
 
 
         let user = await userModel.getUserByGoogleId(google_id);
