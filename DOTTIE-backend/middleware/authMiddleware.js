@@ -32,6 +32,13 @@ const protect = (req, res, next) => {
  * Administrative Authorization Middleware
  * Verifies the user is logged in AND is on the whitelist.
  */
+const ADMIN_EMAILS = new Set(
+    (process.env.ADMIN_EMAILS || '')
+        .split(',')
+        .map(e => e.trim().toLowerCase())
+        .filter(Boolean)
+);
+
 const verifyAdmin = (req, res, next) => {
     const cookieToken = req.cookies.auth_token;
     const headerToken = req.headers.authorization?.startsWith('Bearer ')
@@ -46,16 +53,7 @@ const verifyAdmin = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Exact list of admin emails
-        const adminEmails = [
-            'manziroyal38@gmail.com',
-            'manziluckyun@gmail.com',
-            'cangebrunain@gmail.com'
-        ].map(e => e.trim().toLowerCase());
-
-        if (!adminEmails.includes(decoded.email.toLowerCase())) {
-            // Do not destroy the cookie, just deny access to admin features
-            // This allows them to stay logged in as a normal user
+        if (!ADMIN_EMAILS.has(decoded.email.toLowerCase())) {
             return res.status(403).json({ success: false, message: 'Unauthorized. This account does not have admin access' });
         }
 
