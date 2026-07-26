@@ -30,10 +30,11 @@ export default defineConfig({
     port: 5176,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:3000',
+        target: 'https://dottie-backend.onrender.com',
         changeOrigin: true,
         secure: false
       }
     }
   }
 });
+
