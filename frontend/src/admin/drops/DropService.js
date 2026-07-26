@@ -1,22 +1,33 @@
 import axios from 'axios';
 
-const isProduction = typeof window !== 'undefined' && window.location.hostname === 'faithoverfearrw.netlify.app';
-const API_BASE_URL = isProduction ? 'https://faith-over-fear-mqgz.onrender.com' : (import.meta.env.VITE_API_URL || '');
+const API_BASE_URL = 'https://dottie-backend.onrender.com';
 const ADMIN_API_URL = `${API_BASE_URL}/api/admin/drops`;
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 
-// Attach auth token to all requests
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('fof_token');
+    console.log('[Admin API]', config.method?.toUpperCase(), config.url);
+    const token = localStorage.getItem('dottie_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const url = error.config?.url || 'unknown';
+    const method = error.config?.method?.toUpperCase() || 'unknown';
+    const status = error.response?.status;
+    const data = error.response?.data;
+    console.error(`[Admin API ERROR] ${method} ${url} → ${status}`, data || error.message);
+    return Promise.reject(error);
+  }
 );
 
 const DropService = {
@@ -35,7 +46,7 @@ const DropService = {
             const response = await axios.post('/api/auth/login', { email, password });
             const data = response.data;
             if (data.success && data.access_token) {
-                localStorage.setItem('fof_token', data.access_token);
+                localStorage.setItem('dottie_token', data.access_token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
             }
             return data;
@@ -57,12 +68,12 @@ const DropService = {
 
     logout: async () => {
         try {
-            localStorage.removeItem('fof_token');
+            localStorage.removeItem('dottie_token');
             delete axios.defaults.headers.common['Authorization'];
             const response = await axios.post('/api/auth/logout');
             return response.data;
         } catch (error) {
-            localStorage.removeItem('fof_token');
+            localStorage.removeItem('dottie_token');
             delete axios.defaults.headers.common['Authorization'];
             console.error('Logout failed:', error);
             throw error;
@@ -186,7 +197,7 @@ const DropService = {
 
     updateOrderStatus: async (id, status) => {
         try {
-            const API_BASE = import.meta.env.VITE_API_URL || 'https://faith-over-fear-mqgz.onrender.com';
+            const API_BASE = import.meta.env.VITE_API_URL || 'https://dottie-backend.onrender.com';
             const response = await axios.put(`${API_BASE}/api/admin/orders/${id}/status`, { status });
             return response.data;
         } catch (error) {
@@ -364,3 +375,4 @@ const DropService = {
 };
 
 export default DropService;
+

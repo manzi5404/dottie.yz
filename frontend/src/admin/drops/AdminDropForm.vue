@@ -394,10 +394,8 @@ const handleImageUpload = async (event) => {
     const uploadFormData = new FormData();
     uploadFormData.append('file', file);
 
-    const token = localStorage.getItem('fof_token');
-    const uploadUrl = window.location.hostname === 'faithoverfearrw.netlify.app'
-      ? 'https://faith-over-fear-mqgz.onrender.com/api/upload'
-      : '/api/upload';
+    const token = localStorage.getItem('dottie_token');
+    const uploadUrl = 'https://dottie-backend.onrender.com/api/upload';
     const response = await fetch(uploadUrl, {
       method: 'POST',
       headers: token ? { 'Authorization': `Bearer ${token}` } : {},
@@ -424,10 +422,8 @@ const handleMultipleImageUpload = async (event, index) => {
 
   formData.products[index].uploading = true;
   try {
-    const token = localStorage.getItem('fof_token');
-    const uploadUrl = window.location.hostname === 'faithoverfearrw.netlify.app'
-      ? 'https://faith-over-fear-mqgz.onrender.com/api/upload'
-      : '/api/upload';
+    const token = localStorage.getItem('dottie_token');
+    const uploadUrl = 'https://dottie-backend.onrender.com/api/upload';
     for (const file of files) {
       const uploadFormData = new FormData();
       uploadFormData.append('file', file);
@@ -484,3 +480,4 @@ const handleSubmit = async () => {
   }
 };
 </script>
+
