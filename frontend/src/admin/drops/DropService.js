@@ -67,17 +67,14 @@ const DropService = {
     },
 
     logout: async () => {
+        localStorage.removeItem('dottie_token');
+        delete axios.defaults.headers.common['Authorization'];
         try {
-            localStorage.removeItem('dottie_token');
-            delete axios.defaults.headers.common['Authorization'];
-            const response = await axios.post('/api/auth/logout');
-            return response.data;
+            await axios.post('/api/auth/logout');
         } catch (error) {
-            localStorage.removeItem('dottie_token');
-            delete axios.defaults.headers.common['Authorization'];
-            console.error('Logout failed:', error);
-            throw error;
+            console.error('Logout API call failed (local session still cleared):', error);
         }
+        return { success: true };
     },
 
     getDrops: async (activeOnly = false, includeProducts = false) => {
