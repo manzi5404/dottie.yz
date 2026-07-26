@@ -192,10 +192,11 @@
                                 </div>
                                 <div class="absolute top-4 left-4 bg-d-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">New</div>
                             </div>
-                            <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
-                            <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category"></p>
-                            <p class="text-sm font-mono text-d-text-secondary" x-text="(product.price || product.quality_prices?.[0]?.price || 0).toLocaleString() + ' FRW'"></p>
-                        </div>
+                             <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
+                             <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category"></p>
+                             <p class="text-sm font-mono text-d-text-secondary mb-3" x-text="(product.price || product.quality_prices?.[0]?.price || 0).toLocaleString() + ' FRW'"></p>
+                             <button @click.stop="addToCart(product)" class="w-full bg-d-accent text-white text-[10px] font-bold uppercase tracking-[0.2em] py-2 hover:bg-white hover:text-black transition-all">Add To Cart</button>
+                         </div>
                     </template>
                 </div>
                 <div x-show="filteredProducts.length === 0" class="text-center py-20">
@@ -245,10 +246,11 @@
                                  </div>
                                  <div class="absolute top-4 left-4 bg-d-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">New</div>
                              </div>
-                             <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
-                             <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category || selectedDrop.title"></p>
-                             <p class="text-sm font-mono text-d-text-secondary" x-text="(product.price || product.quality_prices?.[0]?.price || 0).toLocaleString() + ' FRW'"></p>
-                         </div>
+                              <h3 class="text-xs font-bold uppercase tracking-wider mb-1 group-hover:text-d-accent transition-colors" x-text="product.name"></h3>
+                              <p class="text-[10px] text-d-text-muted uppercase tracking-wider mb-2" x-text="product.category || selectedDrop.title"></p>
+                              <p class="text-sm font-mono text-d-text-secondary mb-3" x-text="(product.price || product.quality_prices?.[0]?.price || 0).toLocaleString() + ' FRW'"></p>
+                              <button @click.stop="addToCart(product)" class="w-full bg-d-accent text-white text-[10px] font-bold uppercase tracking-[0.2em] py-2 hover:bg-white hover:text-black transition-all">Add To Cart</button>
+                          </div>
                      </template>
                  </div>
                  <div x-show="selectedDropProducts.length === 0" class="text-center py-20">
