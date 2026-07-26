@@ -56,7 +56,23 @@ function copyStaticAssets() {
           }
         };
         copyDir(imagesDir, distImagesDir);
+        console.log('✓ Copied src/ to dist/src/');
         console.log('✓ Copied images/ to dist/images/');
+
+        // Copy _headers files for Cloudflare Pages cache control
+        const headersFiles = [
+          { src: path.resolve(__dirname, 'public', '_headers'), dest: path.join(distDir, '_headers') },
+          { src: path.resolve(__dirname, 'public', '_headers'), dest: path.join(distDir, 'admin', '_headers') },
+          { src: path.resolve(__dirname, 'DOTTIE-frontend', 'public', '_headers'), dest: path.join(distDir, 'admin', '_headers') },
+        ];
+        headersFiles.forEach(({ src, dest }) => {
+          if (fs.existsSync(src)) {
+            const destDir = path.dirname(dest);
+            if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+            fs.copyFileSync(src, dest);
+            console.log(`✓ Copied _headers to ${dest}`);
+          }
+        });
       }
     }
   };
