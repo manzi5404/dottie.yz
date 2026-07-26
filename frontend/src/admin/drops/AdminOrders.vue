@@ -66,7 +66,7 @@
                   </div>
                 </td>
                 <td class="px-4 sm:px-6 py-5 whitespace-nowrap">
-                  <div class="text-sm font-bold text-fof-accent">{{ formatCurrency(order.total_price) }}</div>
+                  <div class="text-sm font-bold text-emerald-500">{{ formatCurrency(order.total_price) }}</div>
                   <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">{{ order.payment_method || 'momo' }}</div>
                 </td>
                 <td class="px-4 sm:px-6 py-5 text-xs whitespace-nowrap">
