@@ -2,7 +2,7 @@
     const host = window.location.hostname;
     if (host === 'localhost') return 'http://localhost:3000';
     if (host === '127.0.0.1') return 'http://localhost:3000';
-    return 'https://DOTTIE-backend-production.up.railway.app';
+    return 'https://dottie-backend.onrender.com';
 })();
 
 const shopLogic = () => ({

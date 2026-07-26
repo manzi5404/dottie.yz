@@ -12,7 +12,8 @@
       x-data="shopLogic()"
       x-init="init()"
       @scroll.window="scrolled = (window.pageYOffset > 50)"
-      :class="{ 'scrolled': scrolled }">
+      :class="{ 'scrolled': scrolled }"
+      data-api-base-url="https://dottie-backend.onrender.com">
 
     <!-- Intro Animation -->
     <div id="intro-overlay" class="intro-overlay" style="display: none;">
@@ -248,6 +249,7 @@
     <script type="module" src="/src/js/main.js"></script>
 </body>
 </html>
+
 
 
 
