@@ -4,7 +4,7 @@
     <div v-if="!isAuthenticated" class="min-h-screen flex items-center justify-center px-4">
       <div class="w-full max-w-md space-y-8 p-10 bg-zinc-900/50 backdrop-blur-3xl border border-slate-800 rounded-3xl shadow-2xl animate-in slide-in-from-bottom-4 duration-700">
         <div class="text-center space-y-2">
-          <h1 class="text-4xl font-black tracking-tighter text-white">F<span class="text-blue-500">></span>F <span class="text-xs uppercase tracking-widest text-slate-500 ml-2 font-bold opacity-50">Admin</span></h1>
+          <h1 class="text-4xl font-black tracking-tighter text-white">DOTTIE<span class="text-emerald-500">.</span>YZ <span class="text-xs uppercase tracking-widest text-slate-500 ml-2 font-bold opacity-50">Admin</span></h1>
           <p class="text-slate-500 text-sm font-medium">Restricted Access Portal</p>
         </div>
 
@@ -81,7 +81,7 @@
       <nav class="bg-black/50 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div class="flex items-center gap-8">
-            <span class="text-xl font-black tracking-tighter text-white">F<span class="text-blue-500">></span>F <span class="text-xs uppercase tracking-widest text-slate-500 ml-2 font-bold opacity-50">Admin</span></span>
+            <span class="text-xl font-black tracking-tighter text-white">DOTTIE<span class="text-emerald-500">.</span>YZ <span class="text-xs uppercase tracking-widest text-slate-500 ml-2 font-bold opacity-50">Admin</span></span>
             <div class="hidden md:flex items-center gap-1">
               <button 
                 @click="currentTab = 'collections'"
@@ -618,3 +618,4 @@ onMounted(checkAuth);
 .animate-in { animation: fade-in 0.3s ease-out; }
 .slide-in-from-bottom-4 { animation: slide-in-from-bottom 0.3s ease-out; }
 </style>
+
