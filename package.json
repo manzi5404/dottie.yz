@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "npm run build:frontend && npm run build:admin",
     "build:frontend": "vite build",
-    "build:admin": "npx vite build --config frontend/src/admin/drops/vite.config.js",
+    "build:admin": "node node_modules/vite/bin/vite.js build --config frontend/src/admin/drops/vite.config.js",
     "preview": "vite preview",
     "backend": "nodemon DOTTIE-backend/server.js",
     "vercel-build": "npm run build"
