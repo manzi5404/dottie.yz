@@ -3,8 +3,8 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import fs from 'fs';
 
-const rootDir = path.resolve(__dirname, 'src/admin');
-const outDir = path.resolve(__dirname, 'dist/admin');
+const rootDir = path.resolve(__dirname, '..', 'frontend', 'src', 'admin', 'drops');
+const outDir = path.resolve(__dirname, 'dist', 'admin');
 
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
