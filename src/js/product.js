@@ -23,6 +23,9 @@ const productLogic = () => ({
     relatedItems: [],
     loadingPDP: true,
     viewedInstructions: false,
+    zooming: false,
+    mouseX: 50,
+    mouseY: 50,
 
     async init() {
         this.loadingPDP = true;
@@ -30,7 +33,7 @@ const productLogic = () => ({
         const id = params.get('id');
 
         try {
-            const res = await fetch(`/api/products/id/${id}`);
+                const res = await fetch(`${window.API_BASE_URL || ''}/api/products/id/${id}`);
             if (res.ok) {
                 const data = await res.json();
                 const product = data.product || data;

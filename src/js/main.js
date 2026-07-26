@@ -8,9 +8,8 @@ import './announcement-entry.jsx';
 
 const API_BASE_URL = (() => {
     const host = window.location.hostname;
-    if (host === 'localhost') return 'http://localhost:3000';
-    if (host === '127.0.0.1') return 'http://localhost:3000';
-    return 'https://DOTTIE-backend-production.up.railway.app';
+    if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:3000';
+    return 'https://dottie-backend.onrender.com';
 })();
 
 window.API_BASE_URL = API_BASE_URL;
