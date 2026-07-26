@@ -149,8 +149,7 @@ const productLogic = () => ({
         if (!this.product) return;
         const shop = Alpine.$data(document.body);
         if (shop && typeof shop.addToCart === 'function') {
-            shop.addToCart(this.product, this.quantity, this.selectedSize, this.selectedColor);
-        } else {
+            try { shop.addToCart(this.product, this.quantity, this.selectedSize, this.selectedColor); } catch (err) { console.error("addToCart failed:", err); } } else {
             console.error("shopLogic.addToCart not found");
         }
     },
@@ -182,3 +181,4 @@ const productLogic = () => ({
 });
 
 export default productLogic;
+

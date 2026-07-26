@@ -136,8 +136,7 @@ const productLogic = () => ({
 
         const shop = Alpine.$data(document.body);
         if (shop && typeof shop.addToCart === 'function') {
-            shop.addToCart(this.product, this.quantity, this.selectedSize, this.selectedColor);
-        } else {
+            try { shop.addToCart(this.product, this.quantity, this.selectedSize, this.selectedColor); window.dispatchEvent(new CustomEvent("notify", { detail: { message: "Added to cart successfully", type: "success" } })); } catch (err) { console.error("addToCart failed:", err); window.dispatchEvent(new CustomEvent("notify", { detail: { message: "Failed to add to cart: " + err.message, type: "error" } })); } } else {
             console.error("shopLogic.addToCart not found");
         }
     },
@@ -169,3 +168,4 @@ const productLogic = () => ({
 });
 
 export default productLogic;
+

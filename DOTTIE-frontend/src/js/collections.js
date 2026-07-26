@@ -1,7 +1,7 @@
 const API_BASE_URL = window.API_BASE_URL || document.body?.dataset?.apiBaseUrl || (() => {
   const host = window.location.hostname;
   if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:5000';
-  return 'https://DOTTIE-backend-production.up.railway.app';
+  return 'https://dottie-backend.onrender.com';
 })();
 
 const collectionsLogic = () => ({
@@ -46,3 +46,4 @@ const collectionsLogic = () => ({
 });
 
 export default collectionsLogic;
+

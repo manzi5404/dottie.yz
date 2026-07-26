@@ -11,7 +11,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || document.body?.dataset?.api
     const host = window.location.hostname;
     if (host === 'localhost') return 'http://localhost:5000';
     if (host === '127.0.0.1') return 'http://localhost:5000';
-    return 'https://fof-backend-production.up.railway.app';
+    return 'https://dottie-backend.onrender.com';
 })();
 
 window.API_BASE_URL = API_BASE_URL;
@@ -46,3 +46,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("F>F Frontend Loaded");
 });
+
